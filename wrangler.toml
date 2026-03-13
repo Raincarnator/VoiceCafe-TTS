@@ -1,0 +1,31 @@
+name = "tts"
+main = "index.js"
+compatibility_date = "2024-01-15"
+compatibility_flags = ["nodejs_compat"]
+
+[env.production]
+name = "tts-voice-magic"
+
+[env.staging]
+name = "tts-voice-magic-staging"
+
+# 变量配置（如果需要的话）
+[vars]
+# 可以在这里添加环境变量
+
+# 如果需要 KV 存储（可选）
+# [[kv_namespaces]]
+# binding = "MY_KV_NAMESPACE"
+# id = "your-kv-namespace-id"
+# preview_id = "your-preview-kv-namespace-id"
+
+# 如果需要 D1 数据库（可选）
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "my-database"
+# database_id = "your-database-id"
+
+# 路由配置
+[triggers]
+crons = []
+
