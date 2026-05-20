@@ -1,84 +1,92 @@
-# 🎙️ VoiceCraft - AI驱动的语音处理平台
+# 🎙️ VoiceCafe TTS - AI-Powered Voice Processing Platform
 
-一个功能强大的AI语音处理平台，集成了文字转语音(TTS)和语音转文字(STT)双向功能。基于Microsoft Edge TTS和硅基流动API，支持20+种语音选项，为用户提供完整的语音处理解决方案。
->
-> 直接使用: https://tts.wangwangit.com
+[English](README.md) | [简体中文](docs/README_zh-CN.md) | [繁體中文](docs/README_zh-TW.md) | [日本語](docs/README_ja.md)
 
-<img width="2512" height="1284" alt="image" src="https://github.com/user-attachments/assets/570961ef-b189-480f-833e-7877ce38f19d" />
+A powerful AI voice processing platform that integrates Text-to-Speech (TTS) and Speech-to-Text (STT) capabilities. Built on Microsoft Edge TTS and SiliconFlow API, supporting 650+ voice options across 154 languages.
 
+**🌐 Live Demo**: [https://tts.reincarnatey.net/](https://tts.reincarnatey.net/)
 
-## ✨ 特性
+## 📸 Screenshots
 
-### 🎯 核心功能
-- 🗣️ **文字转语音(TTS)** - 基于Microsoft Edge TTS，支持20+种中文语音
-- 🎧 **语音转文字(STT)** - 集成硅基流动API，高精度语音识别
-- 🔄 **双向处理** - 智能模式切换，语音与文字无缝转换
-- 🌍 **多语言支持** - 支持中文、英文、日文、韩文、西班牙文、法文、德文、俄文
+![English Interface](docs/img/screenshot_en.png)
 
-### 🎨 用户体验
-- ⚡ **秒速生成** - 快速生成高质量语音文件和转录文本
-- 🆓 **完全免费** - 无需注册，无使用限制
-- 📱 **响应式设计** - 完美适配桌面端和移动端
-- 🎛️ **丰富参数** - 支持语速、音调、语音风格等多种调节
-- 📥 **支持下载** - 生成的音频可直接下载为 MP3 格式
-- 📋 **便捷操作** - 转录结果可复制、编辑，支持转为语音功能
+## ✨ Features
 
-### 🔧 技术特性
-- 🔗 **API 兼容** - 兼容 OpenAI TTS API 格式
-- 🎵 **多音频格式** - 支持mp3、wav、m4a、flac、aac等9种音频格式
-- 🔐 **灵活配置** - 支持默认Token和自定义Token配置
-- 🎨 **现代化UI** - 优雅的卡片式设计，直观的模式切换
+### 🎯 Core Capabilities
+- 🗣️ **Text-to-Speech (TTS)** - Powered by Microsoft Edge TTS with 650+ voices across 154 languages
+- 🎧 **Speech-to-Text (STT)** - Integrated with SiliconFlow API for high-accuracy speech recognition
+- 🔄 **Bidirectional Processing** - Seamless conversion between voice and text
+- 🌍 **Multilingual Support** - 9 UI languages: English, Simplified Chinese, Traditional Chinese, Japanese, Korean, Spanish, French, German, Russian
 
-## 🚀 一键部署
+### 🎨 User Experience
+- ⚡ **Lightning Fast** - Generate high-quality audio and transcriptions in seconds
+- 🆓 **Completely Free** - No registration required, unlimited usage
+- 📱 **Responsive Design** - Perfect adaptation for desktop and mobile devices
+- 🎛️ **Rich Parameters** - Adjustable speed, pitch, voice style, and more
+- 📥 **Download Support** - Export generated audio in MP3, WAV, and other formats
+- 📋 **Convenient Operations** - Copy, edit transcription results, convert to speech
 
-### 点击按钮，一键部署到 CloudFlare Workers,
+### 🔧 Technical Features
+- 🔗 **API Compatible** - OpenAI TTS API format compatibility
+- 🎵 **Multiple Audio Formats** - Support for MP3, WAV, M4A, FLAC, AAC, OGG, WebM, AMR, 3GP
+- 🔐 **Flexible Configuration** - Support for default and custom API tokens
+- 🎨 **Modern UI** - Elegant card-based design with intuitive mode switching
+- 📊 **Optional Statistics** - KV/D1 storage-based usage statistics (disabled by default)
+- 📥 **TTS Source Export** - Export TTS configuration for third-party software
 
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/wangwangit/tts)
+## 🚀 Quick Deploy
 
+### Deploy to Cloudflare Workers with One Click
 
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/Raincarnator/VoiceCafe-TTS)
 
-## 🎯 使用方法
+**Note**: After deployment, you need to configure environment variables to enable Speech-to-Text (STT) and statistics features. See the [Configuration](#️-configuration) section for details.
 
-### 🌐 网页界面使用
+## 📖 Usage
 
-#### 文字转语音模式
-1. 访问部署后的 Worker 域名
-2. 确保当前为"文字转语音"模式（默认模式）
-3. 选择输入方式：手动输入或上传txt文件
-4. 在文本框中输入要转换的文字，或上传txt文件
-5. 选择喜欢的语音、语速、音调、语音风格等参数
-6. 点击"开始生成语音"按钮
-7. 播放生成的音频或下载 MP3 文件
+### 🌐 Web Interface
 
-#### 语音转文字模式
-1. 点击页面顶部的"语音转文字"按钮切换模式
-2. 上传音频文件（支持mp3、wav、m4a等9种格式，最大10MB）
-3. 选择Token配置：使用默认Token或输入自定义硅基流动Token
-4. 点击"开始语音转录"按钮
-5. 查看转录结果，支持复制、编辑或直接转为语音
+#### Text-to-Speech Mode
+1. Visit your deployed Worker domain
+2. Ensure you're in "Text to Speech" mode (default)
+3. Choose input method: manual input or upload .txt file
+4. Enter text or upload a file
+5. Select voice, speed, pitch, style, and other parameters
+6. Click "Generate Speech" button
+7. Play the generated audio or download as MP3
 
-#### 🌍 多语言切换
-- 点击右上角的语言切换器
-- 支持中文、English、日本語、한국어、Español、Français、Deutsch、Русский
-- 自动记住用户的语言偏好
+#### Speech-to-Text Mode
+1. Click "Speech to Text" button at the top to switch modes
+2. Upload audio file (supports 9 formats, max 25MB)
+3. Use default API Token or enter custom API Token
+4. Click "Start Transcription" button
+5. View transcription results, copy, edit, or convert to speech
 
-### 🔌 API 调用
+#### 🌍 Language Switching
+- Click the language switcher in the top-right corner
+- Supports 9 languages with automatic preference saving
+- UI language automatically maps to corresponding TTS locale
 
-#### 文字转语音 API
+### 🔌 API Usage
+
+#### Text-to-Speech API
+
+**Endpoint**: `POST /v1/audio/speech`
 
 ```javascript
-// JavaScript 调用示例
+// JavaScript Example
 const response = await fetch('https://your-worker.workers.dev/v1/audio/speech', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-        input: "你好，这是一个测试",
-        voice: "zh-CN-XiaoxiaoNeural",
+        input: "Hello, this is a test",
+        voice: "en-US-JennyNeural",
         speed: 1.0,
         pitch: "0",
-        style: "general"
+        style: "general",
+        response_format: "mp3"
     })
 });
 
@@ -86,26 +94,40 @@ const audioBlob = await response.blob();
 ```
 
 ```bash
-# cURL 调用示例
+# cURL Example
 curl -X POST "https://your-worker.workers.dev/v1/audio/speech" \
   -H "Content-Type: application/json" \
   -d '{
-    "input": "你好，这是一个测试",
-    "voice": "zh-CN-XiaoxiaoNeural",
+    "input": "Hello, this is a test",
+    "voice": "en-US-JennyNeural",
     "speed": 1.0,
     "pitch": "0",
-    "style": "general"
+    "style": "general",
+    "response_format": "mp3"
   }' \
   --output speech.mp3
 ```
 
-#### 语音转文字 API
+**Parameters**:
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `input` | string | - | Text content to convert (required) |
+| `voice` | string | `en-US-JennyNeural` | Voice selection |
+| `speed` | number | `1.0` | Speech rate (0.5-2.0) |
+| `pitch` | string | `"0"` | Pitch adjustment (-50 to 50) |
+| `style` | string | `"general"` | Voice style |
+| `response_format` | string | `"mp3"` | Output format (mp3, wav, opus, flac, aac, ogg, webm, amr, 3gp) |
+
+#### Speech-to-Text API
+
+**Endpoint**: `POST /v1/audio/transcriptions`
 
 ```javascript
-// JavaScript 调用示例
+// JavaScript Example
 const formData = new FormData();
-formData.append('file', audioFile); // 音频文件
-formData.append('token', 'your-siliconflow-token'); // 可选，不提供则使用默认token
+formData.append('file', audioFile); // Audio file
+formData.append('token', 'your-siliconflow-token'); // Optional if env var is set
 
 const response = await fetch('https://your-worker.workers.dev/v1/audio/transcriptions', {
     method: 'POST',
@@ -113,198 +135,425 @@ const response = await fetch('https://your-worker.workers.dev/v1/audio/transcrip
 });
 
 const result = await response.json();
-console.log(result.text); // 转录结果
+console.log(result.text); // Transcription result
 ```
 
 ```bash
-# cURL 调用示例
+# cURL Example
 curl -X POST "https://your-worker.workers.dev/v1/audio/transcriptions" \
   -F "file=@audio.mp3" \
   -F "token=your-siliconflow-token"
 ```
 
-## 🎨 支持的语音
+**Parameters**:
 
-### 女声
-- `zh-CN-XiaoxiaoNeural` - 晓晓 (温柔)
-- `zh-CN-XiaoyiNeural` - 晓伊 (甜美)
-- `zh-CN-XiaochenNeural` - 晓辰 (知性)
-- `zh-CN-XiaohanNeural` - 晓涵 (优雅)
-- `zh-CN-XiaomengNeural` - 晓梦 (梦幻)
-- `zh-CN-XiaomoNeural` - 晓墨 (文艺)
-- `zh-CN-XiaoqiuNeural` - 晓秋 (成熟)
-- `zh-CN-XiaoruiNeural` - 晓睿 (智慧)
-- `zh-CN-XiaoshuangNeural` - 晓双 (活泼)
-- `zh-CN-XiaoxuanNeural` - 晓萱 (清新)
-- `zh-CN-XiaoyanNeural` - 晓颜 (柔美)
-- `zh-CN-XiaoyouNeural` - 晓悠 (悠扬)
-- `zh-CN-XiaozhenNeural` - 晓甄 (端庄)
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `file` | File | - | Audio file (required, multiple formats supported) |
+| `token` | string | env var | SiliconFlow API Token (optional if configured in environment) |
 
-### 男声
-- `zh-CN-YunxiNeural` - 云希 (清朗)
-- `zh-CN-YunyangNeural` - 云扬 (阳光)
-- `zh-CN-YunjianNeural` - 云健 (稳重)
-- `zh-CN-YunfengNeural` - 云枫 (磁性)
-- `zh-CN-YunhaoNeural` - 云皓 (豪迈)
-- `zh-CN-YunxiaNeural` - 云夏 (热情)
-- `zh-CN-YunyeNeural` - 云野 (野性)
-- `zh-CN-YunzeNeural` - 云泽 (深沉)
+**Supported Audio Formats**: mp3, wav, m4a, flac, aac, ogg, webm, amr, 3gp (max 25MB)
 
-## ⚙️ API 参数
+#### Voice List API
 
-### 🗣️ 文字转语音 API 参数
-
-| 参数 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| `input` | string | - | 要转换的文本内容（必填） |
-| `voice` | string | `zh-CN-XiaoxiaoNeural` | 语音选择 |
-| `speed` | number | `1.0` | 语速 (0.5-2.0) |
-| `pitch` | string | `"0"` | 音调 (-50 到 50) |
-| `style` | string | `"general"` | 语音风格 |
-| `volume` | string | `"0"` | 音量调节 |
-
-### 🎧 语音转文字 API 参数
-
-| 参数 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| `file` | File | - | 音频文件（必填，支持多种格式） |
-| `token` | string | 默认内置 | 硅基流动API Token（可选） |
-
-#### 支持的音频格式
-- **文件格式**: mp3, wav, m4a, flac, aac, ogg, webm, amr, 3gp
-- **文件大小**: 最大 10MB
-- **模型**: FunAudioLLM/SenseVoiceSmall（自动使用）
-
-### 支持的语音风格
-
-- `general` - 通用风格
-- `assistant` - 智能助手
-- `chat` - 聊天对话
-- `customerservice` - 客服专业
-- `newscast` - 新闻播报
-- `affectionate` - 亲切温暖
-- `calm` - 平静舒缓
-- `cheerful` - 愉快欢乐
-- `gentle` - 温和柔美
-- `lyrical` - 抒情诗意
-- `serious` - 严肃正式
-
-## 🛠️ 技术架构
-
-### 🔧 核心技术
-- **前端**: 现代化 HTML5 + CSS3 + 原生JavaScript
-- **后端**: Cloudflare Workers（边缘计算）
-- **TTS引擎**: Microsoft Edge TTS（20+种中文语音）
-- **STT引擎**: 硅基流动 FunAudioLLM/SenseVoiceSmall
-- **国际化**: 内置8种语言支持，自动检测浏览器语言
-
-### 🎨 设计架构
-- **设计系统**: CSS变量 + 响应式布局
-- **UI框架**: 无依赖，纯原生实现
-- **交互设计**: 双向模式切换，直观的用户体验
-- **API设计**: RESTful API，兼容OpenAI格式
-
-### 🔒 安全与性能
-- **无服务器**: 基于Cloudflare Workers，全球边缘部署
-- **数据安全**: 所有处理在边缘完成，无数据存储
-- **高可用**: 全球CDN加速，99.9%可用性
-- **零配置**: 开箱即用，无需额外配置
-
-## 🎨 设计特色
-
-### 🎯 用户界面
-- **双模式设计**: 水平布局的模式切换器，消除界面空白
-- **现代化 UI**: 采用简洁的卡片式设计
-- **国际化界面**: 8种语言无缝切换，右上角语言选择器
-- **响应式布局**: 完美适配各种设备尺寸
-- **微交互**: 丰富的悬停效果和动画
-
-### 🎨 视觉体验
-- **统一风格**: 新旧功能视觉一致，无违和感
-- **智能切换**: 根据模式动态显示相关界面元素
-- **无渐变设计**: 使用纯色设计，更加专业
-- **可访问性**: 支持键盘导航和屏幕阅读器
-
-## 📱 移动端优化
-
-### 🔄 适配策略
-- **模式切换**: 移动端垂直布局，桌面端水平布局
-- **触摸友好**: 按钮尺寸针对移动端优化
-- **文件上传**: 支持拖拽和点击两种方式
-- **性能优化**: 针对移动设备的网络和性能优化
-
-### 📋 功能适配
-- **音频上传**: 移动端优化的文件选择界面
-- **结果展示**: 移动端友好的转录结果展示
-- **语言切换**: 移动端下拉菜单适配
-
-## 🔧 开发
-
-### 本地开发
+**Endpoint**: `GET /v1/voices?locale={locale}`
 
 ```bash
-# 克隆项目
-git clone <your-repo>
+# Get all voices
+curl https://your-worker.workers.dev/v1/voices
 
-# 安装 Wrangler CLI
-npm install -g wrangler
-
-# 本地开发
-wrangler dev
+# Get voices for specific locale
+curl https://your-worker.workers.dev/v1/voices?locale=en-US
 ```
 
-### 项目结构
+#### Locale List API
+
+**Endpoint**: `GET /v1/locales`
+
+```bash
+curl https://your-worker.workers.dev/v1/locales
+```
+
+#### TTS Source Export API
+
+**Endpoint**: `GET /tts.json?lang={locales}`
+
+```bash
+# Export all languages
+curl https://your-worker.workers.dev/tts.json
+
+# Export specific language
+curl https://your-worker.workers.dev/tts.json?lang=en-US
+
+# Export multiple languages
+curl https://your-worker.workers.dev/tts.json?lang=en-US+zh-CN
+```
+
+#### Statistics API (if enabled)
+
+**Endpoint**: `GET /v1/stats`
+
+```bash
+curl https://your-worker.workers.dev/v1/stats
+```
+
+## ⚙️ Configuration
+
+### Method 1: Web Console Configuration (For One-Click Deployment)
+
+Applicable scenario: After deploying with the one-click deployment button, or when you need to modify an already deployed Worker configuration.
+
+#### Step 1: Configure Environment Variables (Optional)
+
+If you need to enable default STT functionality or Google Analytics, configure the following environment variables:
+
+1. Log in to [Cloudflare Dashboard](https://dash.cloudflare.com/)
+2. Select **Compute → Workers & Pages**
+3. Click your Worker to enter the details page
+4. Select the **Settings** tab
+5. In the **Variables and Secrets** section, click **Add**
+6. Configure the variable in the right sidebar:
+   - **Type**: Select `Text` (regular variable) or `Secret` (sensitive information, recommended for API Keys)
+   - **Variable name**: Enter the variable name (e.g., `SILICONFLOW_API_KEY`)
+   - **Value**: Enter the variable value (e.g., `sk-xxxxx`)
+7. Click **Deploy** in the bottom right to complete the addition
+
+**Optional Environment Variable Configuration**:
+
+| Variable Name | Type | Description | Example Value | Default |
+|---------------|------|-------------|---------------|---------|
+| `SILICONFLOW_API_KEY` | Secret | SiliconFlow API key for enabling default speech-to-text functionality. If not configured, users need to provide a custom API Key when using STT. Get API key from [SiliconFlow](https://cloud.siliconflow.cn/) | `sk-xxxxx` | None |
+| `STATS_TYPE` | Text | Statistics mode | `none`, `kv`, `d1` | `none` |
+| `GA_MEASUREMENT_ID` | Text | Google Analytics Measurement ID | `G-XXXXXXXXXX` | None |
+
+#### Step 2: Configure Statistics Feature (Optional)
+
+**Option A: Disable Statistics (Default)**
+
+No configuration needed, statistics feature is disabled by default.
+
+**Option B: Enable KV Storage Statistics**
+
+1. In Cloudflare Dashboard, select **Storage & databases → Workers KV**
+2. Click **Create Instance**
+3. In **Namespace name**, enter a name (e.g., `voicecafe-stats` or custom name)
+4. Click **Create** to create the namespace
+5. Return to **Compute → Workers & Pages**, select your Worker
+6. Select the **Bindings** tab
+7. Click **Add binding**, select **KV namespace**
+8. Click **Add Binding**
+9. In the popup configuration:
+   - **Variable name**: Enter `STATS_KV` (fixed, do not modify)
+   - **KV namespace**: Select the namespace you just created
+10. Click **Add Binding** to complete the binding
+11. Return to the **Settings** tab, in the **Variables and Secrets** section:
+    - If `STATS_TYPE` variable already exists: Click the edit button, modify **Value** to `kv`, click **Deploy** in the bottom right
+    - If `STATS_TYPE` variable doesn't exist: Click **Add**, in the right sidebar select **Type** as `Text`, **Variable name** as `STATS_TYPE`, **Value** as `kv`, click **Deploy** in the bottom right
+
+**Option C: Enable D1 Database Statistics (Recommended)**
+
+1. In Cloudflare Dashboard, select **Storage & databases → D1 SQL database**
+2. Click **Create Database**
+3. In **Name**, enter a name (e.g., `voicecafe-stats` or custom name)
+4. Click **Create** to create the database
+5. Return to **Compute → Workers & Pages**, select your Worker
+6. Select the **Bindings** tab
+7. Click **Add binding**, select **D1 database**
+8. Click **Add Binding**
+9. In the popup configuration:
+   - **Variable name**: Enter `STATS_DB` (fixed, do not modify)
+   - **D1 database**: Select the database you just created
+10. Click **Add Binding** to complete the binding
+11. Return to the **Settings** tab, in the **Variables and Secrets** section:
+    - If `STATS_TYPE` variable already exists: Click the edit button, modify **Value** to `d1`, click **Deploy** in the bottom right
+    - If `STATS_TYPE` variable doesn't exist: Click **Add**, in the right sidebar select **Type** as `Text`, **Variable name** as `STATS_TYPE`, **Value** as `d1`, click **Deploy** in the bottom right
+
+**Note**: Database tables will be automatically created on first use, no manual initialization required.
+
+### Method 2: wrangler.toml + Command Line Configuration (For Local Deployment)
+
+Applicable scenario: Deploying from local using the `wrangler deploy` command.
+
+#### Step 1: Configure wrangler.toml
+
+Edit the `wrangler.toml` file in the project root directory:
+
+```toml
+[vars]
+# Statistics mode: "none" (default), "kv", or "d1"
+STATS_TYPE = "none"
+
+# Google Analytics Measurement ID (optional)
+GA_MEASUREMENT_ID = "G-XXXXXXXXXX"
+```
+
+#### Step 2: Configure SiliconFlow API Key (Optional)
+
+To enable default STT functionality, use the `wrangler secret` command to configure (recommended, key won't be exposed in config file):
+
+```bash
+wrangler secret put SILICONFLOW_API_KEY
+# Enter your API Key when prompted
+```
+
+Or configure in `wrangler.toml` (for local development testing only):
+
+```toml
+[vars]
+SILICONFLOW_API_KEY = "your-api-key-here"  # Note: Do not commit to Git
+```
+
+**Note**: If this API Key is not configured, users need to provide a custom API Key when using STT functionality.
+
+#### Step 3: Configure Statistics Feature (Optional)
+
+**Option A: Disable Statistics (Default)**
+
+Keep `STATS_TYPE = "none"`, no other configuration needed.
+
+**Option B: Enable KV Storage Statistics**
+
+1. Create KV namespace:
+
+```bash
+# Create production KV namespace (name can be customized, e.g., voicecafe-stats)
+wrangler kv namespace create "voicecafe-stats"
+# Output example: id = "abc123def456..."
+
+# Create preview KV namespace (for local development)
+wrangler kv namespace create "voicecafe-stats" --preview
+# Output example: preview_id = "xyz789uvw012..."
+```
+
+2. Configure in `wrangler.toml`:
+
+```toml
+[vars]
+STATS_TYPE = "kv"
+
+[[kv_namespaces]]
+binding = "STATS_KV"
+id = "abc123def456..."              # Replace with the id from the command output
+preview_id = "xyz789uvw012..."      # Replace with the preview_id from the command output
+```
+
+**Parameter Description**:
+- `binding`: Binding name, accessed in code via `env.STATS_KV`, **fixed as STATS_KV, do not modify**
+- `id`: Production environment ID of the KV namespace
+- `preview_id`: Preview environment ID of the KV namespace, for local development
+
+**View existing KV namespaces**:
+```bash
+wrangler kv namespace list
+```
+
+**Option C: Enable D1 Database Statistics (Recommended)**
+
+1. Create D1 database:
+
+```bash
+# Database name can be customized, e.g., voicecafe-stats
+wrangler d1 create voicecafe-stats
+# Output example: database_id = "12345678-abcd-1234-abcd-123456789abc"
+```
+
+2. Configure in `wrangler.toml`:
+
+```toml
+[vars]
+STATS_TYPE = "d1"
+
+[[d1_databases]]
+binding = "STATS_DB"
+database_name = "voicecafe-stats"
+database_id = "12345678-abcd-1234-abcd-123456789abc"  # Replace with the database_id from the command output
+```
+
+**Parameter Description**:
+- `binding`: Binding name, accessed in code via `env.STATS_DB`, **fixed as STATS_DB, do not modify**
+- `database_name`: Database name, can be customized (e.g., voicecafe-stats)
+- `database_id`: Unique identifier of the D1 database
+
+**View existing D1 databases**:
+```bash
+wrangler d1 list
+```
+
+**Automatic Table Creation**: On first use, the system will automatically create the required statistics tables.
+
+## 🏗️ Architecture
+
+### Technology Stack
+
+**Frontend**:
+- Modern HTML5 + CSS3 + Vanilla JavaScript
+- No external dependencies (statistics charts use ECharts dynamically loaded)
+- Responsive design with CSS variables
+- Built-in internationalization (9 languages)
+- ECharts for statistics data visualization (heatmap and trend charts)
+
+**Backend**:
+- Cloudflare Workers (Edge Computing)
+- Modular architecture with clear separation of concerns
+- Service-oriented design pattern
+
+**TTS Engine**:
+- Microsoft Edge TTS
+- 650+ voices across 154 languages
+- Multiple voice styles and adjustable parameters
+
+**STT Engine**:
+- SiliconFlow FunAudioLLM/SenseVoiceSmall
+- High-accuracy speech recognition
+- Multiple audio format support
+
+**Storage** (Optional):
+- Cloudflare KV for simple key-value statistics
+- Cloudflare D1 for relational database statistics
+
+### Project Structure
 
 ```
-├── index.js          # 主要代码文件
-├── README.md         # 项目文档
-└── wrangler.toml     # Cloudflare Workers 配置
+├── src/
+│   ├── config/              # Configuration files
+│   │   └── constants.js     # Constants definition
+│   ├── data/                # Static data
+│   │   └── voices-data.js   # Voice database
+│   ├── handlers/            # Request handlers
+│   │   ├── stt-handler.js   # Speech-to-text handler
+│   │   ├── tts-handler.js   # Text-to-speech handler
+│   │   ├── voices-handler.js # Voice list handler
+│   │   ├── stats-handler.js  # Statistics handler
+│   │   └── tts-source-handler.js # TTS source export handler
+│   ├── services/            # Core services
+│   │   ├── tts.js           # TTS service
+│   │   ├── stt.js           # STT service
+│   │   ├── stats-service.js # Statistics service abstraction
+│   │   ├── kv-stats-service.js # KV statistics implementation
+│   │   ├── d1-stats-service.js # D1 statistics implementation
+│   │   └── stats-factory.js # Statistics service factory
+│   ├── utils/               # Utility functions
+│   │   ├── cors.js          # CORS headers utility
+│   │   ├── crypto.js        # Encryption utility
+│   │   ├── html-loader.js   # HTML loader
+│   │   ├── text.js          # Text processing utility
+│   │   └── xml.js           # XML processing utility
+│   └── templates/           # HTML templates
+│       ├── index.html       # Main HTML template
+│       └── html-template.js # Generated template (auto-generated)
+├── docs/                    # Documentation
+│   ├── img/                 # Screenshots
+│   ├── README_zh-CN.md      # Simplified Chinese README
+│   ├── README_zh-TW.md      # Traditional Chinese README
+│   └── README_ja.md         # Japanese README
+├── index.js                 # Main entry point
+├── build.js                 # Build script
+├── package.json             # Project configuration
+├── wrangler.toml            # Cloudflare Workers configuration
+└── README.md                # This file
 ```
 
-## 🤝 贡献
+### Design Patterns
 
-欢迎提交 Issue 和 Pull Request！
+- **Service Layer**: Abstraction for TTS, STT, and statistics services
+- **Factory Pattern**: Statistics service factory for different storage backends
+- **Handler Pattern**: Modular request handlers for different endpoints
+- **Template Generation**: Build-time HTML template generation with variable injection
 
-## 📄 许可证
+## 🛠️ Development
 
-MIT License
+### Prerequisites
 
-## 🌟 更新日志
+- Node.js 16+
+- npm or yarn
+- Cloudflare account (for deployment)
+- SiliconFlow API key (optional, for STT functionality)
 
-### v2.0.0 - 重大更新
-- 🎉 **新增语音转文字功能** - 集成硅基流动API，支持高精度语音识别
-- 🌍 **多语言国际化** - 支持8种语言，自动检测浏览器语言
-- 🎨 **品牌升级** - 更名为VoiceCraft，全新的AI语音处理平台
-- 🔄 **双向处理** - 智能模式切换，语音与文字无缝转换
-- 📱 **界面优化** - 水平布局的模式切换器，更好的空间利用
-- 🔧 **错误修复** - 修复文本包含特殊字符时的XML转义问题
+### Local Development
 
-### v1.x.x - 历史版本
-- 基础的文字转语音功能
-- Microsoft Edge TTS集成
-- 响应式设计
+```bash
+# Clone the repository
+git clone https://github.com/Raincarnator/VoiceCafe-TTS.git
+cd VoiceCafe-TTS
 
-## 🙏 致谢
+# Install dependencies
+npm install
 
-- **Microsoft Edge TTS** - 提供高质量的语音合成服务
-- **硅基流动** - 提供先进的语音识别API
-- **Cloudflare Workers** - 提供无服务器计算平台
-- **开源社区** - 感谢所有贡献者和用户的支持
+# Configure environment variables
+# Edit wrangler.toml file, configure STATS_TYPE, SILICONFLOW_API_KEY, etc. as needed
 
-## 📞 联系我们
+# Build the project (generates HTML template)
+npm run build
 
-关注公众号「一只会飞的旺旺」获取更多 AI 工具和技术分享：
+# Start local development server
+npm run dev
+```
 
-- 🔥 最新 AI 工具推荐和使用教程
-- 🚀 前沿技术解析和实战案例  
-- 💎 独家资源和工具源码分享
-- 💬 技术问题答疑和交流社群
+Visit http://localhost:8787 to see the application.
+
+### Deployment
+
+```bash
+# Deploy to Cloudflare Workers
+npm run deploy
+
+# Set production secrets (recommended to use secret instead of writing in wrangler.toml)
+wrangler secret put SILICONFLOW_API_KEY
+```
+
+**Production Configuration Recommendations**:
+- Sensitive information (such as `SILICONFLOW_API_KEY`) should use the `wrangler secret` command or be configured in the Cloudflare console
+- Non-sensitive configuration (such as `STATS_TYPE`, `GA_MEASUREMENT_ID`) can be written in the `[vars]` section of `wrangler.toml`
+
+### Build Process
+
+The build script (`build.js`) reads the HTML template from `src/templates/index.html` and generates `src/templates/html-template.js` with:
+- Escaped template strings
+- Google Analytics injection support
+- Statistics enabled flag injection
+
+Run `npm run build` after modifying the HTML template.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+### How to Contribute
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+### Development Guidelines
+
+- Follow the existing code style
+- Add comments for complex logic
+- Update documentation for new features
+- Test thoroughly before submitting PR
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+This project is based on and inspired by:
+
+- **[wangwangit/tts](https://github.com/wangwangit/tts)** - Original TTS project foundation
+- **[Microsoft Edge TTS](https://azure.microsoft.com/en-us/products/ai-services/text-to-speech)** - High-quality voice synthesis service
+- **[SiliconFlow](https://cloud.siliconflow.cn/)** - Advanced speech recognition API
+- **[Cloudflare Workers](https://workers.cloudflare.com/)** - Serverless computing platform
+- **Open Source Community** - Thanks to all contributors and users
+
+## 📞 Contact & Support
+
+- **GitHub Issues**: [Report bugs or request features](https://github.com/Raincarnator/VoiceCafe-TTS/issues)
+- **GitHub Discussions**: [Ask questions or share ideas](https://github.com/Raincarnator/VoiceCafe-TTS/discussions)
 
 ---
 
-**🎙️ VoiceCraft - 让语音处理更智能，让创意更有声音！** 
+**🎙️ VoiceCafe TTS - Making Voice Processing Smarter, Making Creativity More Vocal!**
 
-*从文字到语音，从语音到文字，AI驱动的完整语音处理解决方案。*
-
-
-
+*From text to speech, from speech to text - AI-powered complete voice processing solution.*

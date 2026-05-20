@@ -1,0 +1,23 @@
+{
+  "name": "voicecafe-tts",
+  "version": "2.0.0",
+  "description": "VoiceCafe - AI驱动的语音处理平台",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "build": "node build.js",
+    "dev": "wrangler dev index.js",
+    "deploy": "wrangler deploy index.js"
+  },
+  "keywords": [
+    "tts",
+    "stt",
+    "voice",
+    "cloudflare-workers"
+  ],
+  "author": "Raincarnator",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}

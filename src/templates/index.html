@@ -1,0 +1,4565 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="page.title">VoiceCraft - AI-Powered Voice Processing Platform</title>
+    <meta name="description" content="" data-i18n-content="page.description">
+    <meta name="keywords" content="" data-i18n-content="page.keywords">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #64748b;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --error-color: #dc2626;
+            --background-color: #f8fafc;
+            --surface-color: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-color: #e2e8f0;
+            --border-focus: #3b82f6;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+        }
+
+        /* 深色模式 */
+        body.dark-mode {
+            --background-color: #0f172a;
+            --surface-color: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border-color: #334155;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3);
+        }
+
+        /* 可访问性：视觉隐藏但屏幕阅读器可读 */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 隐藏滚动条 */
+        html {
+            overflow-y: scroll;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+
+        html::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+            display: none; /* Chrome, Safari, Opera */
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: var(--surface-color);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            padding: 40px 0;
+            text-align: center;
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 12px;
+            letter-spacing: -0.025em;
+        }
+        
+        .header .subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .header .features {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .feature-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--success-color);
+        }
+        
+        .main-content {
+            background: var(--surface-color);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+        
+        .form-container {
+            padding: 40px;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            color: var(--text-primary);
+            background: var(--surface-color);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px rgb(59 130 246 / 0.1);
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        /* 新布局样式 */
+        .controls-row-1 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .controls-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .controls-row-3 {
+            display: grid;
+            grid-template-columns: 5fr 1fr;
+            gap: 20px;
+            align-items: stretch;
+        }
+
+        /* 中等屏幕自适应 */
+        @media (max-width: 1024px) {
+            .controls-row-1,
+            .controls-row-2,
+            .controls-row-3 {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .controls-row-3 {
+                /* 输出格式在上，生成按钮在下 */
+                grid-template-columns: 1fr;
+            }
+
+            .controls-row-3 .form-group {
+                order: -1;
+            }
+        }
+
+        .btn-generate {
+            margin: 0;
+            height: 100%;
+        }
+
+        .format-group {
+            margin-bottom: 0;
+            display: flex;
+            align-items: stretch;
+        }
+
+        .format-group .form-select {
+            height: 100%;
+        }
+
+        /* 滑块样式 */
+        .slider-group {
+            margin-bottom: 0;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--border-color);
+            outline: none;
+            margin: 12px 0;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            background: var(--primary-hover);
+            transform: scale(1.2);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .slider::-moz-range-thumb:hover {
+            background: var(--primary-hover);
+            transform: scale(1.2);
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+        }
+
+        .slider-labels span {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+        }
+
+        .slider-labels span:hover {
+            background: var(--background-color);
+            color: var(--text-primary);
+        }
+
+        .slider-labels span.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .slider-value {
+            float: right;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        /* Footer 样式 */
+        .footer {
+            background: var(--surface-color);
+            border-top: 1px solid var(--border-color);
+            margin-top: 60px;
+            padding: 40px 20px 20px;
+        }
+
+        .footer-content {
+            max-width: max-content;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(250px, max-content));
+            gap: 40px;
+            justify-content: space-between;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .footer-section h2 {
+            color: var(--primary-color);
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+        }
+
+        .footer-section h3 {
+            color: var(--text-primary);
+            font-size: 1rem;
+            margin-bottom: 12px;
+        }
+
+        .footer-section p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .footer-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-link:hover {
+            color: var(--primary-hover);
+        }
+
+        .footer-copyright {
+            margin-top: 16px;
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        body.dark-mode .footer-copyright {
+            color: #94a3b8;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .btn-secondary:hover {
+            background: #047857;
+            transform: translateY(-1px);
+        }
+        
+        .result-container {
+            margin-top: 32px;
+            padding: 24px;
+            background: var(--background-color);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            display: none;
+        }
+        
+        .audio-player {
+            width: 100%;
+            margin-bottom: 16px;
+            border-radius: var(--radius-md);
+        }
+
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .audio-controls .audio-player {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .icon-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .icon-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            margin-top: 16px;
+            font-weight: 500;
+        }
+        
+        .loading-container {
+            text-align: center;
+            padding: 32px 20px;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+        
+        .loading-text {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        /* GitHub 推广面板样式 */
+        .github-promotion {
+            margin-top: 40px;
+            background: var(--surface-color);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .promotion-header {
+            background: #f1f5f9;
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        body.dark-mode .promotion-header {
+            background: #1e293b;
+        }
+
+        .promotion-header-text {
+            flex: 1;
+        }
+
+        .promotion-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .promotion-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .promotion-content {
+            padding: 30px;
+        }
+
+        .promotion-info h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .promotion-info p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .benefits-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .benefits-list li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .benefits-list li:before {
+            content: "✓";
+            color: var(--success-color);
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .github-star-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .github-star-btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        @media (max-width: 768px) {
+            .promotion-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .benefits-list {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        .btn-primary {
+        }
+        
+        .promotion-content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 24px;
+            align-items: center;
+        }
+        
+        .qr-code {
+            width: 120px;
+            height: 120px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .promotion-info h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+        
+        .promotion-info p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+        
+        .benefits-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .benefits-list li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 8px;
+        }
+        
+        .benefits-list li:before {
+            content: "✓";
+            color: var(--success-color);
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        /* 输入方式选择优化样式 */
+        .input-method-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 20px;
+            background: var(--background-color);
+            padding: 4px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+        }
+        
+        .tab-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 20px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        
+        .tab-btn:hover {
+            color: var(--primary-color);
+            background: rgba(37, 99, 235, 0.05);
+        }
+        
+        .tab-btn.active {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: var(--shadow-sm);
+            transform: translateY(-1px);
+        }
+        
+        .tab-btn .tab-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            font-size: 0.875rem;
+        }
+        
+        .tab-btn:not(.active) .tab-icon {
+            background: rgba(100, 116, 139, 0.1);
+        }
+        
+        .file-upload-container {
+            width: 100%;
+        }
+        
+        .file-drop-zone {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 48px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(135deg, var(--background-color) 0%, rgba(248, 250, 252, 0.8) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .file-drop-zone::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(99, 102, 241, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .file-drop-zone:hover::before,
+        .file-drop-zone.dragover::before {
+            opacity: 1;
+        }
+        
+        .file-drop-zone:hover,
+        .file-drop-zone.dragover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+        }
+        
+        .file-drop-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .file-drop-icon {
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color) 0%, #3b82f6 100%);
+            border-radius: var(--radius-lg);
+            color: white;
+            margin-bottom: 8px;
+            box-shadow: var(--shadow-md);
+            position: relative;
+        }
+        
+        .file-drop-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+            line-height: 1.4;
+        }
+        
+        .file-drop-hint {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin: 0;
+            padding: 8px 16px;
+            background: rgba(100, 116, 139, 0.1);
+            border-radius: var(--radius-sm);
+        }
+        
+        .file-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--surface-color) 0%, rgba(248, 250, 252, 0.5) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            margin-top: 16px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+        
+        .file-info:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .file-details {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+        }
+        
+        .file-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .file-name::before {
+            content: '';
+            width: 16px;
+            height: 16px;
+            background: var(--primary-color);
+            border-radius: 3px;
+            opacity: 0.8;
+            flex-shrink: 0;
+        }
+        
+        .file-size {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            background: rgba(100, 116, 139, 0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            width: fit-content;
+        }
+        
+        .file-remove-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: var(--error-color);
+            color: white;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+        }
+        
+        .file-remove-btn:hover {
+            background: #b91c1c;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        }
+        
+        /* 主功能切换器样式 */
+        .mode-switcher {
+            max-width: 900px;
+            margin: 0 auto 30px;
+            padding: 0 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .mode-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px 32px;
+            border: 2px solid var(--border-color);
+            background: var(--surface-color);
+            color: var(--text-secondary);
+            border-radius: var(--radius-lg);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            flex: 1;
+            max-width: 250px;
+        }
+        
+        .mode-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .mode-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .mode-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* 语音转录界面样式 */
+        .transcription-container {
+            background: var(--surface-color);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .audio-upload-zone {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 48px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(135deg, var(--background-color) 0%, rgba(248, 250, 252, 0.8) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .audio-upload-zone::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(99, 102, 241, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .audio-upload-zone:hover::before,
+        .audio-upload-zone.dragover::before {
+            opacity: 1;
+        }
+        
+        .audio-upload-zone:hover,
+        .audio-upload-zone.dragover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+        }
+        
+        .token-config {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 16px;
+        }
+        
+        .token-option {
+            display: flex;
+            align-items: center;
+        }
+        
+        .token-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: color 0.2s ease;
+        }
+        
+        .token-label:hover {
+            color: var(--text-primary);
+        }
+        
+        .token-label input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            margin: 0;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+        }
+        
+        .transcription-result {
+            margin-top: 20px;
+        }
+        
+        .result-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        
+        .result-actions .btn-secondary {
+            flex: 1;
+            min-width: 140px;
+        }
+        
+        /* 顶部工具栏 */
+        .top-toolbar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+        }
+
+        .github-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .github-link:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .github-link svg {
+            flex-shrink: 0;
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        body.dark-mode .sun-icon {
+            display: none;
+        }
+
+        body.dark-mode .moon-icon {
+            display: block !important;
+        }
+
+        /* 语言切换器样式 */
+        .language-switcher {
+            position: relative;
+        }
+        
+        .language-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .language-btn:hover {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 4px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            min-width: 120px;
+            display: none;
+        }
+        
+        .language-dropdown.show {
+            display: block;
+        }
+        
+        .language-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            transition: background-color 0.2s ease;
+        }
+        
+        .language-option:hover {
+            background: var(--background-color);
+            color: var(--text-primary);
+        }
+        
+        .language-option.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Flag emoji 样式优化 */
+        .flag-emoji {
+            font-family: "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji", sans-serif;
+            font-size: 1.1em;
+            line-height: 1;
+        }
+
+        /* 统计面板样式 */
+        .stats-container {
+            background: var(--surface-color);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+            display: none;
+        }
+
+        .stats-container.active {
+            display: block;
+        }
+
+        .stats-header {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stats-header-text h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .stats-header-text p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .stats-refresh-btn {
+            padding: 8px 16px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .stats-refresh-btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .stats-refresh-btn:active {
+            transform: translateY(0);
+        }
+
+        .stats-refresh-btn.loading {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .stats-refresh-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .stats-refresh-btn.loading svg {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--background-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-card-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .stat-card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+        }
+
+        .stat-card-trend {
+            font-size: 0.75rem;
+            color: var(--success-color);
+        }
+
+        .stats-section {
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stats-charts-row {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 20px;
+            margin-bottom: 30px;
+            align-items: stretch;
+        }
+
+        .stats-charts-row > * {
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .stats-section-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .heatmap-container {
+            background: var(--background-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 3px;
+            width: 100%;
+        }
+
+        .heatmap-cell {
+            width: 100%;
+            aspect-ratio: 1;
+            background: var(--border-color);
+            border-radius: 2px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .heatmap-cell:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+
+        .heatmap-cell[data-level="0"] {
+            background: var(--border-color);
+        }
+
+        .heatmap-cell[data-level="1"] {
+            background: rgba(37, 99, 235, 0.2);
+        }
+
+        .heatmap-cell[data-level="2"] {
+            background: rgba(37, 99, 235, 0.4);
+        }
+
+        .heatmap-cell[data-level="3"] {
+            background: rgba(37, 99, 235, 0.6);
+        }
+
+        .heatmap-cell[data-level="4"] {
+            background: rgba(37, 99, 235, 0.8);
+        }
+
+        .heatmap-cell[data-level="5"] {
+            background: var(--primary-color);
+        }
+
+        .heatmap-tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            pointer-events: none;
+            z-index: 1000;
+            white-space: nowrap;
+            display: none;
+        }
+
+        .heatmap-legend {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .heatmap-legend-item {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+
+        .chart-container {
+            background: var(--background-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .stats-loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .stats-loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        .stats-error {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--error-color);
+        }
+
+        @media (max-width: 768px) {
+            /* 移动端顶部工具栏改为非固定定位 */
+            .top-toolbar {
+                position: relative;
+                top: auto;
+                right: auto;
+                padding: 16px;
+                justify-content: flex-end;
+                background: var(--surface-color);
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .container {
+                padding: 16px;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .form-container {
+                padding: 24px;
+            }
+
+            .controls-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            /* 统计图表在移动端改为上下布局 */
+            .stats-charts-row {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .heatmap-container,
+            .chart-container {
+                width: 100%;
+                max-width: 100%;
+                overflow-x: auto;
+            }
+
+            .chart-container > div {
+                min-width: 300px;
+            }
+
+            .promotion-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 20px;
+            }
+
+            .qr-code {
+                margin: 0 auto;
+            }
+
+            .input-method-tabs {
+                gap: 2px;
+                padding: 2px;
+            }
+
+            .tab-btn {
+                padding: 12px 16px;
+                font-size: 0.85rem;
+                gap: 8px;
+            }
+
+            .tab-btn .tab-icon {
+                width: 18px;
+                height: 18px;
+            }
+
+            .file-drop-zone {
+                padding: 32px 16px;
+            }
+
+            .file-drop-icon {
+                width: 56px;
+                height: 56px;
+            }
+
+            .file-info {
+                padding: 16px;
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+
+            .file-remove-btn {
+                align-self: flex-end;
+            }
+
+            /* 移动端模式切换器样式 */
+            .mode-switcher {
+                padding: 0 16px;
+                margin-bottom: 20px;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .mode-btn {
+                max-width: none;
+                padding: 14px 20px;
+                font-size: 0.9rem;
+                gap: 8px;
+            }
+
+            .mode-icon {
+                width: 20px;
+                height: 20px;
+            }
+
+            /* 移动端语音转录界面样式 */
+            .audio-upload-zone {
+                padding: 32px 16px;
+            }
+
+            .token-config {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .result-actions {
+                flex-direction: column;
+            }
+            
+            .result-actions .btn-secondary {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部工具栏 -->
+    <div class="top-toolbar">
+        <!-- GitHub 链接 -->
+        <a href="https://github.com/Raincarnator/VoiceCafe-TTS" target="_blank" class="github-link" title="Star on GitHub">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+            </svg>
+            <span>Star on GitHub</span>
+        </a>
+
+        <!-- 深色模式切换 -->
+        <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+            <svg class="sun-icon" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+            </svg>
+            <svg class="moon-icon" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" style="display: none;">
+                <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/>
+            </svg>
+        </button>
+
+        <!-- 语言切换器 -->
+        <div class="language-switcher">
+            <div class="language-btn" id="languageBtn">
+                <span id="currentLangFlag">🌐</span>
+                <span id="currentLangName" data-i18n="lang.current">English</span>
+                <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                </svg>
+            </div>
+            <div class="language-dropdown" id="languageDropdown">
+                <div class="language-option" data-lang="en">
+                    <span class="flag-emoji">🇺🇸</span>
+                    <span data-i18n="lang.en">English</span>
+                </div>
+                <div class="language-option" data-lang="zh">
+                    <span class="flag-emoji">🇨🇳</span>
+                    <span data-i18n="lang.zh">简体中文</span>
+                </div>
+                <div class="language-option" data-lang="zh-TW">
+                    <span class="flag-emoji">🇨🇳</span>
+                    <span data-i18n="lang.zh-TW">繁體中文</span>
+                </div>
+                <div class="language-option" data-lang="ja">
+                    <span class="flag-emoji">🇯🇵</span>
+                    <span data-i18n="lang.ja">日本語</span>
+                </div>
+                <div class="language-option" data-lang="ko">
+                    <span class="flag-emoji">🇰🇷</span>
+                    <span data-i18n="lang.ko">한국어</span>
+                </div>
+                <div class="language-option" data-lang="es">
+                    <span class="flag-emoji">🇪🇸</span>
+                    <span data-i18n="lang.es">Español</span>
+                </div>
+                <div class="language-option" data-lang="fr">
+                    <span class="flag-emoji">🇫🇷</span>
+                    <span data-i18n="lang.fr">Français</span>
+                </div>
+                <div class="language-option" data-lang="de">
+                    <span class="flag-emoji">🇩🇪</span>
+                    <span data-i18n="lang.de">Deutsch</span>
+                </div>
+                <div class="language-option" data-lang="ru">
+                    <span class="flag-emoji">🇷🇺</span>
+                    <span data-i18n="lang.ru">Русский</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="container">
+        <div class="header">
+            <h1 data-i18n="header.title">VoiceCafe TTS</h1>
+            <p class="subtitle" data-i18n="header.subtitle">AI-Powered Voice Processing Platform</p>
+            <div class="features">
+                <div class="feature-item">
+                    <span class="feature-icon">✨</span>
+                    <span data-i18n="header.feature1">20+ Voice Options</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">⚡</span>
+                    <span data-i18n="header.feature2">Lightning Fast</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🆓</span>
+                    <span data-i18n="header.feature3">Completely Free</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📱</span>
+                    <span data-i18n="header.feature4">Download Support</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 主功能切换器 -->
+        <div class="mode-switcher">
+            <button type="button" class="mode-btn active" id="ttsMode">
+                <span class="mode-icon">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+                    </svg>
+                </span>
+                <span data-i18n="mode.tts">Text to Speech</span>
+            </button>
+            <button type="button" class="mode-btn" id="transcriptionMode">
+                <span class="mode-icon">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                    </svg>
+                </span>
+                <span data-i18n="mode.transcription">Speech to Text</span>
+            </button>
+            <button type="button" class="mode-btn" id="statsMode">
+                <span class="mode-icon">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                    </svg>
+                </span>
+                <span data-i18n="mode.stats">Usage Statistics</span>
+            </button>
+        </div>
+        
+        <div class="main-content">
+            <div class="form-container">
+                <form id="ttsForm">
+                    <!-- 输入方式选择 -->
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="tts.inputMethod">选择输入方式</label>
+                        <div class="input-method-tabs">
+                            <button type="button" class="tab-btn active" id="textInputTab">
+                                <span class="tab-icon">
+                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                                    </svg>
+                                </span>
+                                <span data-i18n="tts.manualInput">手动输入</span>
+                            </button>
+                            <button type="button" class="tab-btn" id="fileUploadTab">
+                                <span class="tab-icon">
+                                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                                    </svg>
+                                </span>
+                                <span data-i18n="tts.uploadFile">上传文件</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 手动输入区域 -->
+                    <div class="form-group" id="textInputArea">
+                        <label class="form-label" for="text" data-i18n="tts.inputText">输入文本</label>
+                        <textarea class="form-textarea" id="text" data-i18n-placeholder="tts.textPlaceholder" placeholder="请输入要转换为语音的文本内容，支持中文、英文、数字等..." required></textarea>
+                    </div>
+
+                    <!-- 文件上传区域 -->
+                    <div class="form-group" id="fileUploadArea" style="display: none;">
+                        <label class="form-label" for="fileInput" data-i18n="tts.uploadTxtFile">上传txt文件</label>
+                        <div class="file-upload-container">
+                            <div class="file-drop-zone" id="fileDropZone">
+                                <div class="file-drop-content">
+                                    <div class="file-drop-icon">
+                                        <svg width="28" height="28" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/>
+                                        </svg>
+                                    </div>
+                                    <p class="file-drop-text" data-i18n="tts.dropFileHint">拖拽txt文件到此处，或点击选择文件</p>
+                                    <p class="file-drop-hint" data-i18n="tts.fileFormatHint">支持txt格式，最大500KB</p>
+                                </div>
+                                <input type="file" id="fileInput" accept=".txt,text/plain" style="display: none;">
+                            </div>
+                            <div class="file-info" id="fileInfo" style="display: none;">
+                                <div class="file-details">
+                                    <span class="file-name" id="fileName"></span>
+                                    <span class="file-size" id="fileSize"></span>
+                                </div>
+                                <button type="button" class="file-remove-btn" id="fileRemoveBtn">✕</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 配置选项 -->
+                    <!-- 第一行：语言、语音、风格 -->
+                    <div class="controls-row-1">
+                        <div class="form-group">
+                            <label class="form-label" for="locale" data-i18n="tts.localeSelect">语言选择</label>
+                            <select class="form-select" id="locale">
+                                <option value="" data-i18n="tts.loading">加载中...</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="voice" data-i18n="tts.voiceSelect">语音选择</label>
+                            <select class="form-select" id="voice">
+                                <option value="" data-i18n="tts.selectLocaleFirst">请先选择语言</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="style" data-i18n="tts.styleSelect">语音风格</label>
+                            <select class="form-select" id="style">
+                                <option value="general" selected data-i18n="tts.style.general">🎭 通用风格</option>
+                                <option value="assistant" data-i18n="tts.style.assistant">🤖 智能助手</option>
+                                <option value="chat" data-i18n="tts.style.chat">💬 聊天对话</option>
+                                <option value="customerservice" data-i18n="tts.style.customerservice">📞 客服专业</option>
+                                <option value="newscast" data-i18n="tts.style.newscast">📺 新闻播报</option>
+                                <option value="affectionate" data-i18n="tts.style.affectionate">💕 亲切温暖</option>
+                                <option value="calm" data-i18n="tts.style.calm">😌 平静舒缓</option>
+                                <option value="cheerful" data-i18n="tts.style.cheerful">😊 愉快欢乐</option>
+                                <option value="gentle" data-i18n="tts.style.gentle">🌸 温和柔美</option>
+                                <option value="lyrical" data-i18n="tts.style.lyrical">🎼 抒情诗意</option>
+                                <option value="serious" data-i18n="tts.style.serious">🎯 严肃正式</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 第二行：语速和音调滑块 -->
+                    <div class="controls-row-2">
+                        <div class="form-group slider-group">
+                            <label class="form-label" for="speed">
+                                <span data-i18n="tts.speedControl">语速调节</span>
+                                <span class="slider-value" id="speedValue">1.0x</span>
+                            </label>
+                            <input type="range" class="slider" id="speed" min="0.5" max="2.0" step="0.05" value="1.0">
+                            <div class="slider-labels">
+                                <span data-value="0.5" data-i18n="speed.verySlow">🐌 很慢</span>
+                                <span data-value="0.75" data-i18n="speed.slow">🚶 慢速</span>
+                                <span data-value="1.0" class="active" data-i18n="speed.normal">⚡ 正常</span>
+                                <span data-value="1.25" data-i18n="speed.fast">🏃 快速</span>
+                                <span data-value="1.5" data-i18n="speed.veryFast">🚀 很快</span>
+                                <span data-value="2.0" data-i18n="speed.ultraFast">💨 极速</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group slider-group">
+                            <label class="form-label" for="pitch">
+                                <span data-i18n="tts.pitchControl">音调高低</span>
+                                <span class="slider-value" id="pitchValue">0</span>
+                            </label>
+                            <input type="range" class="slider" id="pitch" min="-50" max="50" step="1" value="0">
+                            <div class="slider-labels">
+                                <span data-value="-50" data-i18n="pitch.veryLow">📉 很低沉</span>
+                                <span data-value="-25" data-i18n="pitch.low">📊 低沉</span>
+                                <span data-value="0" class="active" data-i18n="pitch.normal">🎵 标准</span>
+                                <span data-value="25" data-i18n="pitch.high">📈 高亢</span>
+                                <span data-value="50" data-i18n="pitch.veryHigh">🎶 很高亢</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 第三行：生成按钮和输出格式 5:1 -->
+                    <div class="controls-row-3">
+                        <button type="submit" class="btn-primary btn-generate" id="generateBtn">
+                            <span>🎙️</span>
+                            <span data-i18n="tts.generateBtn">开始生成语音</span>
+                        </button>
+
+                        <div class="form-group format-group">
+                            <label for="outputFormat" class="visually-hidden" data-i18n="tts.outputFormat">输出格式</label>
+                            <select class="form-select" id="outputFormat">
+                                <option value="audio-24khz-48kbitrate-mono-mp3" selected>MP3</option>
+                                <option value="audio-24khz-96kbitrate-mono-mp3">MP3 HQ</option>
+                                <option value="audio-48khz-96kbitrate-mono-mp3">MP3 48k</option>
+                                <option value="audio-48khz-192kbitrate-mono-mp3">MP3 HD</option>
+                                <option value="webm-24khz-16bit-mono-opus">WebM</option>
+                                <option value="ogg-24khz-16bit-mono-opus">OGG</option>
+                                <option value="ogg-48khz-16bit-mono-opus">OGG 48k</option>
+                                <option value="riff-24khz-16bit-mono-pcm">WAV</option>
+                                <option value="riff-48khz-16bit-mono-pcm">WAV 48k</option>
+                            </select>
+                        </div>
+                    </div>
+
+            </form>
+
+                <div id="result" class="result-container">
+                    <div id="loading" class="loading-container" style="display: none;">
+                        <div class="loading-spinner"></div>
+                        <p class="loading-text" id="loadingText" data-i18n="tts.generating">正在生成语音，请稍候...</p>
+                        <div class="progress-info" id="progressInfo" style="margin-top: 12px; font-size: 0.875rem; color: var(--text-secondary);"></div>
+                    </div>
+
+                    <div id="success" style="display: none;">
+                        <div class="audio-controls">
+                            <audio id="audioPlayer" class="audio-player" controls></audio>
+                            <a id="downloadBtn" class="icon-btn" download="speech.mp3" data-i18n-title="tts.downloadAudio" title="下载音频">
+                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div id="error" class="error-message" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 语音转录界面 -->
+        <div class="transcription-container" id="transcriptionContainer" style="display: none;">
+            <div class="form-container">
+                <form id="transcriptionForm">
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="stt.uploadAudio">上传音频文件</label>
+                        <div class="audio-upload-zone" id="audioDropZone">
+                            <div class="file-drop-content">
+                                <div class="file-drop-icon">
+                                    <svg width="28" height="28" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+                                        <path d="M14 2v6h6"/>
+                                        <path d="M12 18v-6"/>
+                                        <path d="M9 15l3-3 3 3"/>
+                                    </svg>
+                                </div>
+                                <p class="file-drop-text" data-i18n="stt.dropAudioHint">拖拽音频文件到此处，或点击选择文件</p>
+                                <p class="file-drop-hint" data-i18n="stt.audioFormatHint">支持mp3、wav、m4a、flac、aac、ogg、webm、amr、3gp格式，最大10MB</p>
+                            </div>
+                            <input type="file" id="audioFileInput" accept=".mp3,.wav,.m4a,.flac,.aac,.ogg,.webm,.amr,.3gp,audio/*" style="display: none;">
+                        </div>
+                        <div class="file-info" id="audioFileInfo" style="display: none;">
+                            <div class="file-details">
+                                <span class="file-name" id="audioFileName"></span>
+                                <span class="file-size" id="audioFileSize"></span>
+                            </div>
+                            <button type="button" class="file-remove-btn" id="audioFileRemoveBtn">✕</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="tokenInput" data-i18n="stt.tokenConfig">API Token配置</label>
+                        <div class="token-config">
+                            <div class="token-option">
+                                <label class="token-label">
+                                    <input type="radio" name="tokenOption" value="default" checked>
+                                    <span data-i18n="stt.useDefaultToken">使用默认Token</span>
+                                </label>
+                            </div>
+                            <div class="token-option">
+                                <label class="token-label">
+                                    <input type="radio" name="tokenOption" value="custom">
+                                    <span data-i18n="stt.useCustomToken">使用硅基流动自定义Token</span>
+                                </label>
+                            </div>
+                        </div>
+                        <input type="password" class="form-input" id="tokenInput"
+                               data-i18n-placeholder="stt.tokenPlaceholder" placeholder="输入您的API Token（可选）" style="display: none;">
+                    </div>
+
+                    <button type="submit" class="btn-primary" id="transcribeBtn">
+                        <span>🎧</span>
+                        <span data-i18n="stt.transcribeBtn">开始语音转录</span>
+                    </button>
+                </form>
+
+                <div id="transcriptionResult" class="result-container">
+                    <div id="transcriptionLoading" class="loading-container" style="display: none;">
+                        <div class="loading-spinner"></div>
+                        <p class="loading-text" id="transcriptionLoadingText" data-i18n="stt.transcribing">正在转录音频，请稍候...</p>
+                        <div class="progress-info" id="transcriptionProgressInfo" style="margin-top: 12px; font-size: 0.875rem; color: var(--text-secondary);"></div>
+                    </div>
+
+                    <div id="transcriptionSuccess" style="display: none;">
+                        <div class="transcription-result">
+                            <label class="form-label" data-i18n="stt.result">转录结果</label>
+                            <textarea class="form-textarea" id="transcriptionText"
+                                      data-i18n-placeholder="stt.resultPlaceholder" placeholder="转录结果将在这里显示..." readonly></textarea>
+                            <div class="result-actions">
+                                <button type="button" class="btn-secondary" id="copyTranscriptionBtn">
+                                    <span>📋</span>
+                                    <span data-i18n="stt.copyText">复制文本</span>
+                                </button>
+                                <button type="button" class="btn-secondary" id="editTranscriptionBtn">
+                                    <span>✏️</span>
+                                    <span data-i18n="stt.editText">编辑文本</span>
+                                </button>
+                                <button type="button" class="btn-secondary" id="useForTtsBtn">
+                                    <span>🎙️</span>
+                                    <span data-i18n="stt.convertToSpeech">转为语音</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="transcriptionError" class="error-message" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 统计面板 -->
+        <div class="stats-container" id="statsContainer">
+            <div class="stats-header">
+                <div class="stats-header-text">
+                    <h2 data-i18n="stats.title">使用量统计</h2>
+                    <p data-i18n="stats.subtitle">过去30天的使用数据统计</p>
+                </div>
+                <button class="stats-refresh-btn" id="statsRefreshBtn" onclick="refreshStatistics()">
+                    <svg fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                        <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                    </svg>
+                    <span data-i18n="stats.refresh">刷新</span>
+                </button>
+            </div>
+
+            <div id="statsLoading" class="stats-loading">
+                <div class="stats-loading-spinner"></div>
+                <p>正在加载统计数据...</p>
+            </div>
+
+            <div id="statsContent" style="display: none;">
+                <!-- 热力图和趋势图并列 -->
+                <div class="stats-charts-row">
+                    <!-- TTS调用热力图 -->
+                    <div class="stats-section">
+                        <h3 class="stats-section-title">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                            </svg>
+                            <span data-i18n="stats.heatmapTitle">TTS调用热力图</span>
+                        </h3>
+                        <div class="heatmap-container">
+                            <div class="heatmap-grid" id="heatmapGrid"></div>
+                            <div class="heatmap-legend">
+                                <span>少</span>
+                                <div class="heatmap-legend-item" style="background: var(--border-color);"></div>
+                                <div class="heatmap-legend-item" style="background: rgba(37, 99, 235, 0.2);"></div>
+                                <div class="heatmap-legend-item" style="background: rgba(37, 99, 235, 0.4);"></div>
+                                <div class="heatmap-legend-item" style="background: rgba(37, 99, 235, 0.6);"></div>
+                                <div class="heatmap-legend-item" style="background: rgba(37, 99, 235, 0.8);"></div>
+                                <div class="heatmap-legend-item" style="background: var(--primary-color);"></div>
+                                <span>多</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 趋势图表 -->
+                    <div class="stats-section">
+                        <h3 class="stats-section-title">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/>
+                            </svg>
+                            <span data-i18n="stats.chartTitle">使用趋势</span>
+                        </h3>
+                        <div class="chart-container">
+                            <div id="statsChart" style="width: 540px; height: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 总计卡片 -->
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <div class="stat-card-label" data-i18n="stats.totalPageViews">总页面访问量</div>
+                        <div class="stat-card-value" id="totalPageViews">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-label" data-i18n="stats.totalTtsCalls">总TTS调用次数</div>
+                        <div class="stat-card-value" id="totalTtsCalls">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-label" data-i18n="stats.totalTtsChars">总TTS字符数</div>
+                        <div class="stat-card-value" id="totalTtsChars">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="statsError" class="stats-error" style="display: none;">
+                <p>⚠️ 加载统计数据失败</p>
+            </div>
+        </div>
+
+        <!-- GitHub 推广组件 -->
+        <div class="github-promotion" id="githubPromotion" style="display: none;">
+            <div class="promotion-header">
+                <div class="promotion-header-text">
+                    <h2 class="promotion-title" data-i18n="promotion.title">🎉 生成成功！喜欢这个工具吗？</h2>
+                    <p class="promotion-subtitle" data-i18n="promotion.subtitle">给我们的 GitHub 仓库点个 Star 吧！</p>
+                </div>
+                <a href="https://github.com/Raincarnator/VoiceCafe-TTS" target="_blank" class="github-star-btn">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                    </svg>
+                    <span data-i18n="promotion.starButton">Star on GitHub</span>
+                </a>
+            </div>
+            <div class="promotion-content">
+                <div class="promotion-info">
+                    <h3 data-i18n="promotion.projectTitle">⭐ VoiceCafe TTS - 开源语音处理平台</h3>
+                    <p data-i18n="promotion.projectDesc">完全开源免费的 AI 语音处理工具，支持 154 种语言和 650 种语音</p>
+                    <ul class="benefits-list">
+                        <li data-i18n="promotion.benefit1">650 种高质量语音</li>
+                        <li data-i18n="promotion.benefit2">完全开源，代码透明可审计</li>
+                        <li data-i18n="promotion.benefit3">无需注册，完全免费使用</li>
+                        <li data-i18n="promotion.benefit4">隐私保护，不存储用户数据</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedFile = null;
+        let currentInputMethod = 'text'; // 'text' or 'file'
+        let currentMode = 'tts'; // 'tts', 'transcription', or 'stats'
+        let selectedAudioFile = null;
+        let transcriptionToken = null;
+        let currentLanguage = 'en'; // 默认语言
+
+        // 国际化翻译数据
+        const translations = {
+            en: {
+                'page.title': 'VoiceCafe - AI Voice Processing Platform',
+                'page.description': 'VoiceCafe is an AI-powered platform that converts text to speech and speech to text with 650+ voice options across 154 languages, lightning fast processing, completely free to use.',
+                'page.keywords': 'text to speech,AI voice synthesis,online TTS,voice generator,free voice tools,speech to text,voice transcription,multilingual TTS',
+                'lang.current': 'English',
+                'lang.en': 'English',
+                'lang.zh': '简体中文',
+                'lang.zh-TW': '繁體中文',
+                'lang.ja': '日本語',
+                'lang.ko': '한국어',
+                'lang.es': 'Español',
+                'lang.fr': 'Français',
+                'lang.de': 'Deutsch',
+                'lang.ru': 'Русский',
+                'header.title': 'VoiceCafe TTS',
+                'header.subtitle': 'AI-Powered Voice Processing Platform',
+                'header.feature1': '154 Languages 650 Voices',
+                'header.feature2': 'Ultra-Fast Generation',
+                'header.feature3': 'Open Source & Free',
+                'header.feature4': 'Multiple Formats',
+                'mode.tts': 'Text to Speech',
+                'mode.transcription': 'Speech to Text',
+                'mode.stats': 'Usage Statistics',
+                'stats.title': 'Usage Statistics',
+                'stats.subtitle': 'Usage data for the past 30 days',
+                'stats.totalPageViews': 'Total Page Views',
+                'stats.totalTtsCalls': 'Total TTS Calls',
+                'stats.totalTtsChars': 'Total TTS Characters',
+                'stats.heatmapTitle': 'TTS Call Heatmap',
+                'stats.chartTitle': 'Usage Trends',
+                'stats.refresh': 'Refresh',
+                'stats.chart.pageViews': 'Page Views',
+                'stats.chart.ttsCalls': 'TTS Calls',
+                'stats.chart.ttsChars': 'TTS Characters',
+                'gender.female': 'Female',
+                'gender.male': 'Male',
+                'tts.inputMethod': 'Input Method',
+                'tts.manualInput': 'Manual Input',
+                'tts.uploadFile': 'Upload File',
+                'tts.inputText': 'Input Text',
+                'tts.textPlaceholder': 'Enter the text content to convert to speech, supports Chinese, English, numbers, etc...',
+                'tts.uploadTxtFile': 'Upload Text File',
+                'tts.dropFileHint': 'Drag and drop a text file here, or click to select a file',
+                'tts.fileFormatHint': 'Supports .txt files, maximum 10MB',
+                'tts.localeSelect': 'Select Language',
+                'tts.loading': 'Loading...',
+                'tts.voiceSelect': 'Select Voice',
+                'tts.selectLocaleFirst': 'Please select a language first',
+                'tts.styleSelect': 'Voice Style',
+                'tts.style.general': '🎭 General',
+                'tts.style.assistant': '🤖 Assistant',
+                'tts.style.chat': '💬 Chat',
+                'tts.style.customerservice': '📞 Customer Service',
+                'tts.style.newscast': '📰 Newscast',
+                'tts.style.affectionate': '💕 Affectionate',
+                'tts.style.calm': '😌 Calm',
+                'tts.style.cheerful': '😊 Cheerful',
+                'tts.style.gentle': '🌸 Gentle',
+                'tts.style.lyrical': '🎵 Lyrical',
+                'tts.style.serious': '😐 Serious',
+                'tts.speedControl': 'Speed Control',
+                'tts.pitchControl': 'Pitch Control',
+                'speed.verySlow': '🐌 Very Slow',
+                'speed.slow': '🚶 Slow',
+                'speed.normal': '⚡ Normal',
+                'speed.fast': '🏃 Fast',
+                'speed.veryFast': '🚀 Very Fast',
+                'speed.ultraFast': '💨 Ultra Fast',
+                'pitch.veryLow': '📉 Very Low',
+                'pitch.low': '📊 Low',
+                'pitch.normal': '🎵 Normal',
+                'pitch.high': '📈 High',
+                'pitch.veryHigh': '🎶 Very High',
+                'footer.subtitle': 'AI-Powered Voice Processing Platform',
+                'footer.privacy.title': 'Privacy Statement',
+                'footer.privacy.noCookies': '🔒 We do not use cookies to track users',
+                'footer.privacy.noStorage': '🗑️ We do not store any user-uploaded data',
+                'footer.privacy.oneTime': '⚡ All voice conversions are one-time only',
+                'footer.privacy.autoDelete': '✅ Related data is deleted immediately after conversion',
+                'footer.openSource.title': 'Open Source',
+                'footer.openSource.github': 'GitHub Repository',
+                'footer.openSource.ttsSource': 'TTS Source',
+                'promotion.title': '🎉 Success! Like this tool?',
+                'promotion.subtitle': 'Give our GitHub repository a star!',
+                'promotion.starButton': 'Star on GitHub',
+                'promotion.projectTitle': '⭐ VoiceCafe TTS - Open Source Voice Platform',
+                'promotion.projectDesc': 'Completely free and open-source AI voice processing tool, supporting 154 languages and 650 voices',
+                'promotion.benefit1': '650 high-quality voices',
+                'promotion.benefit2': 'Fully open source, transparent and auditable code',
+                'promotion.benefit3': 'No registration required, completely free to use',
+                'promotion.benefit4': 'Privacy protection, no user data storage',
+                'tts.generateBtn': 'Generate Speech',
+                'tts.generating': 'Generating...',
+                'tts.downloadAudio': 'Download Audio',
+                'stt.uploadAudio': 'Upload Audio File',
+                'stt.dropAudioHint': 'Drag and drop an audio file here, or click to select a file',
+                'stt.audioFormatHint': 'Supports mp3, wav, m4a, webm, mp4, mpeg, mpga formats, maximum 25MB',
+                'stt.tokenConfig': 'Token Configuration',
+                'stt.useDefaultToken': 'Use Default Token',
+                'stt.useCustomToken': 'Use Custom Token',
+                'stt.tokenPlaceholder': 'Enter your OpenAI API Key',
+                'stt.transcribeBtn': 'Start Transcription',
+                'stt.transcribing': 'Transcribing...',
+                'stt.result': 'Transcription Result',
+                'stt.resultPlaceholder': 'Transcription result will be displayed here...',
+                'stt.copyText': 'Copy Text',
+                'stt.editText': 'Edit Text',
+                'stt.convertToSpeech': 'Convert to Speech'
+            },
+            zh: {
+                'page.title': 'VoiceCafe - AI驱动的语音处理平台',
+                'page.description': 'VoiceCafe是一个AI驱动的平台，支持文字转语音和语音转文字，拥有650+种语音选项，覆盖154种语言，闪电般的处理速度，完全免费使用。',
+                'page.keywords': '文字转语音,AI语音合成,在线TTS,语音生成器,免费语音工具,语音转文字,语音转录,多语言TTS',
+                'lang.current': '简体中文',
+                'lang.en': 'English',
+                'lang.zh': '简体中文',
+                'lang.zh-TW': '繁體中文',
+                'lang.ja': '日本語',
+                'lang.ko': '한국어',
+                'lang.es': 'Español',
+                'lang.fr': 'Français',
+                'lang.de': 'Deutsch',
+                'lang.ru': 'Русский',
+                'header.title': 'VoiceCafe TTS',
+                'header.subtitle': 'AI驱动的语音处理平台',
+                'header.feature1': '154种语言 650种语音',
+                'header.feature2': '超快生成速度',
+                'header.feature3': '完全开源免费',
+                'header.feature4': '多种输出格式',
+                'mode.tts': '文字转语音',
+                'mode.transcription': '语音转文字',
+                'mode.stats': '使用量统计',
+                'stats.title': '使用量统计',
+                'stats.subtitle': '过去30天的使用数据统计',
+                'stats.totalPageViews': '总页面访问量',
+                'stats.totalTtsCalls': '总TTS调用次数',
+                'stats.totalTtsChars': '总TTS字符数',
+                'stats.heatmapTitle': 'TTS调用热力图',
+                'stats.chartTitle': '使用趋势',
+                'stats.refresh': '刷新',
+                'stats.chart.pageViews': '页面访问数',
+                'stats.chart.ttsCalls': 'TTS调用次数',
+                'stats.chart.ttsChars': 'TTS字符数',
+                'gender.female': '女性',
+                'gender.male': '男性',
+                'tts.inputMethod': '选择输入方式',
+                'tts.manualInput': '手动输入',
+                'tts.uploadFile': '上传文件',
+                'tts.inputText': '输入文本',
+                'tts.textPlaceholder': '请输入要转换为语音的文本内容，支持中文、英文、数字等...',
+                'tts.uploadTxtFile': '上传文本文件',
+                'tts.dropFileHint': '拖拽文本文件到此处，或点击选择文件',
+                'tts.fileFormatHint': '支持 .txt 文件，最大 10MB',
+                'tts.localeSelect': '选择语言',
+                'tts.loading': '加载中...',
+                'tts.voiceSelect': '选择语音',
+                'tts.selectLocaleFirst': '请先选择语言',
+                'tts.styleSelect': '语音风格',
+                'tts.style.general': '🎭 通用风格',
+                'tts.style.assistant': '🤖 智能助手',
+                'tts.style.chat': '💬 聊天对话',
+                'tts.style.customerservice': '📞 客服服务',
+                'tts.style.newscast': '📰 新闻播报',
+                'tts.style.affectionate': '💕 亲切温柔',
+                'tts.style.calm': '😌 平静沉稳',
+                'tts.style.cheerful': '😊 欢快愉悦',
+                'tts.style.gentle': '🌸 温和柔美',
+                'tts.style.lyrical': '🎵 抒情优美',
+                'tts.style.serious': '😐 严肃正式',
+                'tts.speedControl': '语速控制',
+                'tts.pitchControl': '音调控制',
+                'speed.verySlow': '🐌 很慢',
+                'speed.slow': '🚶 慢速',
+                'speed.normal': '⚡ 正常',
+                'speed.fast': '🏃 快速',
+                'speed.veryFast': '🚀 很快',
+                'speed.ultraFast': '💨 极速',
+                'pitch.veryLow': '📉 很低沉',
+                'pitch.low': '📊 低沉',
+                'pitch.normal': '🎵 标准',
+                'pitch.high': '📈 高亢',
+                'pitch.veryHigh': '🎶 很高亢',
+                'footer.subtitle': 'AI驱动的语音处理平台',
+                'footer.privacy.title': '隐私声明',
+                'footer.privacy.noCookies': '🔒 我们不使用 Cookie 追踪用户',
+                'footer.privacy.noStorage': '🗑️ 不存储用户上传的任何数据',
+                'footer.privacy.oneTime': '⚡ 所有语音转换都是一次性的',
+                'footer.privacy.autoDelete': '✅ 转换完成后相关数据立即删除',
+                'footer.openSource.title': '开源项目',
+                'footer.openSource.github': 'GitHub 仓库',
+                'footer.openSource.ttsSource': 'TTS 源',
+                'promotion.title': '🎉 生成成功！喜欢这个工具吗？',
+                'promotion.subtitle': '给我们的 GitHub 仓库点个 Star 吧！',
+                'promotion.starButton': 'Star on GitHub',
+                'promotion.projectTitle': '⭐ VoiceCafe TTS - 开源语音处理平台',
+                'promotion.projectDesc': '完全开源免费的 AI 语音处理工具，支持 154 种语言和 650 种语音',
+                'promotion.benefit1': '650 种高质量语音',
+                'promotion.benefit2': '完全开源，代码透明可审计',
+                'promotion.benefit3': '无需注册，完全免费使用',
+                'promotion.benefit4': '隐私保护，不存储用户数据',
+                'tts.generateBtn': '生成语音',
+                'tts.generating': '生成中...',
+                'tts.downloadAudio': '下载音频',
+                'stt.uploadAudio': '上传音频文件',
+                'stt.dropAudioHint': '拖拽音频文件到此处，或点击选择文件',
+                'stt.audioFormatHint': '支持 mp3, wav, m4a, webm, mp4, mpeg, mpga 格式，最大 25MB',
+                'stt.tokenConfig': 'Token 配置',
+                'stt.useDefaultToken': '使用默认 Token',
+                'stt.useCustomToken': '使用自定义 Token',
+                'stt.tokenPlaceholder': '请输入您的 OpenAI API Key',
+                'stt.transcribeBtn': '开始转录',
+                'stt.transcribing': '转录中...',
+                'stt.result': '转录结果',
+                'stt.resultPlaceholder': '转录结果将显示在这里...',
+                'stt.copyText': '复制文本',
+                'stt.editText': '编辑文本',
+                'stt.convertToSpeech': '转换为语音'
+            },
+            ja: {
+                'page.title': 'VoiceCafe - AI音声処理プラットフォーム',
+                'page.description': 'VoiceCafeはAI駆動のプラットフォームで、テキスト読み上げと音声テキスト変換に対応。650以上の音声オプション、154言語対応、高速処理、完全無料でご利用いただけます。',
+                'page.keywords': 'テキスト読み上げ,AI音声合成,オンラインTTS,音声ジェネレーター,無料音声ツール,音声テキスト変換,音声転写,多言語TTS',
+                'lang.current': '日本語',
+                'lang.en': 'English',
+                'lang.zh': '简体中文',
+                'lang.zh-TW': '繁體中文',
+                'lang.ja': '日本語',
+                'lang.ko': '한국어',
+                'lang.es': 'Español',
+                'lang.fr': 'Français',
+                'lang.de': 'Deutsch',
+                'lang.ru': 'Русский',
+                'header.title': 'VoiceCafe TTS',
+                'header.subtitle': 'AI音声処理プラットフォーム',
+                'header.feature1': '154言語 650音声',
+                'header.feature2': '超高速生成',
+                'header.feature3': 'オープンソース無料',
+                'header.feature4': '複数フォーマット',
+                'mode.tts': 'テキスト読み上げ',
+                'mode.transcription': '音声テキスト変換',
+                'mode.stats': '使用統計',
+                'stats.title': '使用統計',
+                'stats.subtitle': '過去30日間の使用データ',
+                'stats.totalPageViews': '総ページビュー数',
+                'stats.totalTtsCalls': '総TTS呼び出し数',
+                'stats.totalTtsChars': '総TTS文字数',
+                'stats.heatmapTitle': 'TTS呼び出しヒートマップ',
+                'stats.chartTitle': '使用傾向',
+                'stats.refresh': '更新',
+                'stats.chart.pageViews': 'ページビュー数',
+                'stats.chart.ttsCalls': 'TTS呼び出し数',
+                'stats.chart.ttsChars': 'TTS文字数',
+                'gender.female': '女性',
+                'gender.male': '男性',
+                'tts.inputMethod': '入力方法',
+                'tts.manualInput': '手動入力',
+                'tts.uploadFile': 'ファイルアップロード',
+                'tts.inputText': 'テキスト入力',
+                'tts.textPlaceholder': '音声に変換するテキストを入力してください。日本語、英語、数字などに対応...',
+                'tts.uploadTxtFile': 'テキストファイルをアップロード',
+                'tts.dropFileHint': 'テキストファイルをここにドラッグ＆ドロップ、またはクリックして選択',
+                'tts.fileFormatHint': '.txtファイルに対応、最大10MB',
+                'tts.localeSelect': '言語を選択',
+                'tts.loading': '読み込み中...',
+                'tts.voiceSelect': '音声を選択',
+                'tts.selectLocaleFirst': '最初に言語を選択してください',
+                'tts.styleSelect': '音声スタイル',
+                'tts.style.general': '🎭 一般',
+                'tts.style.assistant': '🤖 アシスタント',
+                'tts.style.chat': '💬 チャット',
+                'tts.style.customerservice': '📞 カスタマーサービス',
+                'tts.style.newscast': '📰 ニュース',
+                'tts.style.affectionate': '💕 優しい',
+                'tts.style.calm': '😌 穏やか',
+                'tts.style.cheerful': '😊 明るい',
+                'tts.style.gentle': '🌸 柔らか',
+                'tts.style.lyrical': '🎵 叙情的',
+                'tts.style.serious': '😐 真面目',
+                'tts.speedControl': '速度調整',
+                'tts.pitchControl': 'ピッチ調整',
+                'speed.verySlow': '🐌 とても遅い',
+                'speed.slow': '🚶 遅い',
+                'speed.normal': '⚡ 標準',
+                'speed.fast': '🏃 速い',
+                'speed.veryFast': '🚀 とても速い',
+                'speed.ultraFast': '💨 超高速',
+                'pitch.veryLow': '📉 とても低い',
+                'pitch.low': '📊 低い',
+                'pitch.normal': '🎵 標準',
+                'pitch.high': '📈 高い',
+                'pitch.veryHigh': '🎶 とても高い',
+                'footer.subtitle': 'AI音声処理プラットフォーム',
+                'footer.privacy.title': 'プライバシーポリシー',
+                'footer.privacy.noCookies': '🔒 Cookieでユーザーを追跡しません',
+                'footer.privacy.noStorage': '🗑️ アップロードされたデータを保存しません',
+                'footer.privacy.oneTime': '⚡ すべての音声変換は一度きりです',
+                'footer.privacy.autoDelete': '✅ 変換完了後、関連データは即座に削除されます',
+                'footer.openSource.title': 'オープンソース',
+                'footer.openSource.github': 'GitHubリポジトリ',
+                'footer.openSource.ttsSource': 'TTSソース',
+                'promotion.title': '🎉 生成成功！このツールが気に入りましたか？',
+                'promotion.subtitle': 'GitHubリポジトリにスターをください！',
+                'promotion.starButton': 'Star on GitHub',
+                'promotion.projectTitle': '⭐ VoiceCafe TTS - オープンソース音声プラットフォーム',
+                'promotion.projectDesc': '完全無料でオープンソースのAI音声処理ツール、154言語と650種類の音声をサポート',
+                'promotion.benefit1': '650種類の高品質音声',
+                'promotion.benefit2': '完全オープンソース、透明で監査可能なコード',
+                'promotion.benefit3': '登録不要、完全無料で使用可能',
+                'promotion.benefit4': 'プライバシー保護、ユーザーデータを保存しません',
+                'tts.generateBtn': '音声生成',
+                'tts.generating': '生成中...',
+                'tts.downloadAudio': '音声をダウンロード',
+                'stt.uploadAudio': '音声ファイルをアップロード',
+                'stt.dropAudioHint': '音声ファイルをここにドラッグ＆ドロップ、またはクリックして選択',
+                'stt.audioFormatHint': 'mp3, wav, m4a, webm, mp4, mpeg, mpga形式に対応、最大25MB',
+                'stt.tokenConfig': 'トークン設定',
+                'stt.useDefaultToken': 'デフォルトトークンを使用',
+                'stt.useCustomToken': 'カスタムトークンを使用',
+                'stt.tokenPlaceholder': 'OpenAI API Keyを入力してください',
+                'stt.transcribeBtn': '文字起こし開始',
+                'stt.transcribing': '文字起こし中...',
+                'stt.result': '文字起こし結果',
+                'stt.resultPlaceholder': '文字起こし結果がここに表示されます...',
+                'stt.copyText': 'テキストをコピー',
+                'stt.editText': 'テキストを編集',
+                'stt.convertToSpeech': '音声に変換'
+            },
+            ko: {
+                'page.title': 'VoiceCafe - AI 음성 처리 플랫폼',
+                'page.description': 'VoiceCafe는 AI 기반 플랫폼으로 텍스트 음성 변환과 음성 텍스트 변환을 지원합니다. 650개 이상의 음성 옵션, 154개 언어 지원, 빠른 처리 속도, 완전 무료로 이용하실 수 있습니다.',
+                'page.keywords': '텍스트 음성 변환,AI 음성 합성,온라인 TTS,음성 생성기,무료 음성 도구,음성 텍스트 변환,음성 전사,다국어 TTS',
+                'lang.current': '한국어',
+                'lang.en': 'English',
+                'lang.zh': '简体中文',
+                'lang.zh-TW': '繁體中文',
+                'lang.ja': '日本語',
+                'lang.ko': '한국어',
+                'lang.es': 'Español',
+                'lang.fr': 'Français',
+                'lang.de': 'Deutsch',
+                'lang.ru': 'Русский',
+                'header.title': 'VoiceCafe TTS',
+                'header.subtitle': 'AI 음성 처리 플랫폼',
+                'header.feature1': '154개 언어 650개 음성',
+                'header.feature2': '초고속 생성',
+                'header.feature3': '오픈소스 무료',
+                'header.feature4': '다양한 형식',
+                'mode.tts': '텍스트 음성 변환',
+                'mode.transcription': '음성 텍스트 변환',
+                'mode.stats': '사용 통계',
+                'stats.title': '사용 통계',
+                'stats.subtitle': '지난 30일간의 사용 데이터',
+                'stats.totalPageViews': '총 페이지 조회수',
+                'stats.totalTtsCalls': '총 TTS 호출 수',
+                'stats.totalTtsChars': '총 TTS 문자 수',
+                'stats.heatmapTitle': 'TTS 호출 히트맵',
+                'stats.chartTitle': '사용 추세',
+                'stats.refresh': '새로고침',
+                'stats.chart.pageViews': '페이지 조회수',
+                'stats.chart.ttsCalls': 'TTS 호출 수',
+                'stats.chart.ttsChars': 'TTS 문자 수',
+                'gender.female': '여성',
+                'gender.male': '남성',
+                'tts.inputMethod': '입력 방법',
+                'tts.manualInput': '수동 입력',
+                'tts.uploadFile': '파일 업로드',
+                'tts.inputText': '텍스트 입력',
+                'tts.textPlaceholder': '음성으로 변환할 텍스트를 입력하세요. 한국어, 영어, 숫자 등 지원...',
+                'tts.uploadTxtFile': '텍스트 파일 업로드',
+                'tts.dropFileHint': '텍스트 파일을 여기에 드래그 앤 드롭하거나 클릭하여 선택',
+                'tts.fileFormatHint': '.txt 파일 지원, 최대 10MB',
+                'tts.localeSelect': '언어 선택',
+                'tts.loading': '로딩 중...',
+                'tts.voiceSelect': '음성 선택',
+                'tts.selectLocaleFirst': '먼저 언어를 선택하세요',
+                'tts.styleSelect': '음성 스타일',
+                'tts.style.general': '🎭 일반',
+                'tts.style.assistant': '🤖 어시스턴트',
+                'tts.style.chat': '💬 채팅',
+                'tts.style.customerservice': '📞 고객 서비스',
+                'tts.style.newscast': '📰 뉴스',
+                'tts.style.affectionate': '💕 다정함',
+                'tts.style.calm': '😌 차분함',
+                'tts.style.cheerful': '😊 명랑함',
+                'tts.style.gentle': '🌸 부드러움',
+                'tts.style.lyrical': '🎵 서정적',
+                'tts.style.serious': '😐 진지함',
+                'tts.speedControl': '속도 조절',
+                'tts.pitchControl': '음높이 조절',
+                'speed.verySlow': '🐌 매우 느림',
+                'speed.slow': '🚶 느림',
+                'speed.normal': '⚡ 보통',
+                'speed.fast': '🏃 빠름',
+                'speed.veryFast': '🚀 매우 빠름',
+                'speed.ultraFast': '💨 초고속',
+                'pitch.veryLow': '📉 매우 낮음',
+                'pitch.low': '📊 낮음',
+                'pitch.normal': '🎵 보통',
+                'pitch.high': '📈 높음',
+                'pitch.veryHigh': '🎶 매우 높음',
+                'footer.subtitle': 'AI 음성 처리 플랫폼',
+                'footer.privacy.title': '개인정보 보호',
+                'footer.privacy.noCookies': '🔒 쿠키로 사용자를 추적하지 않습니다',
+                'footer.privacy.noStorage': '🗑️ 업로드된 데이터를 저장하지 않습니다',
+                'footer.privacy.oneTime': '⚡ 모든 음성 변환은 일회성입니다',
+                'footer.privacy.autoDelete': '✅ 변환 완료 후 관련 데이터가 즉시 삭제됩니다',
+                'footer.openSource.title': '오픈소스',
+                'footer.openSource.github': 'GitHub 저장소',
+                'footer.openSource.ttsSource': 'TTS 소스',
+                'promotion.title': '🎉 생성 완료! 이 도구가 마음에 드시나요?',
+                'promotion.subtitle': 'GitHub 저장소에 스타를 주세요!',
+                'promotion.starButton': 'Star on GitHub',
+                'promotion.projectTitle': '⭐ VoiceCafe TTS - 오픈소스 음성 플랫폼',
+                'promotion.projectDesc': '완전 무료 오픈소스 AI 음성 처리 도구, 154개 언어와 650개 음성 지원',
+                'promotion.benefit1': '650개의 고품질 음성',
+                'promotion.benefit2': '완전 오픈소스, 투명하고 감사 가능한 코드',
+                'promotion.benefit3': '등록 불필요, 완전 무료 사용',
+                'promotion.benefit4': '개인정보 보호, 사용자 데이터 저장 안 함',
+                'tts.generateBtn': '음성 생성',
+                'tts.generating': '생성 중...',
+                'tts.downloadAudio': '오디오 다운로드',
+                'stt.uploadAudio': '오디오 파일 업로드',
+                'stt.dropAudioHint': '오디오 파일을 여기에 드래그 앤 드롭하거나 클릭하여 선택',
+                'stt.audioFormatHint': 'mp3, wav, m4a, webm, mp4, mpeg, mpga 형식 지원, 최대 25MB',
+                'stt.tokenConfig': '토큰 설정',
+                'stt.useDefaultToken': '기본 토큰 사용',
+                'stt.useCustomToken': '사용자 정의 토큰 사용',
+                'stt.tokenPlaceholder': 'OpenAI API Key를 입력하세요',
+                'stt.transcribeBtn': '전사 시작',
+                'stt.transcribing': '전사 중...',
+                'stt.result': '전사 결과',
+                'stt.resultPlaceholder': '전사 결과가 여기에 표시됩니다...',
+                'stt.copyText': '텍스트 복사',
+                'stt.editText': '텍스트 편집',
+                'stt.convertToSpeech': '음성으로 변환'
+            },
+            es: {
+                'page.title': 'VoiceCafe - Plataforma de Procesamiento de Voz con IA',
+                'page.description': 'VoiceCafe es una plataforma impulsada por IA que convierte texto a voz y voz a texto con más de 650 opciones de voz en 154 idiomas, procesamiento ultrarrápido, completamente gratis.',
+                'page.keywords': 'texto a voz,síntesis de voz IA,TTS en línea,generador de voz,herramientas de voz gratis,voz a texto,transcripción de voz,TTS multilingüe',
+                'lang.current': 'Español',
+                'lang.en': 'English',
+                'lang.zh': '简体中文',
+                'lang.zh-TW': '繁體中文',
+                'lang.ja': '日本語',
+                'lang.ko': '한국어',
+                'lang.es': 'Español',
+                'lang.fr': 'Français',
+                'lang.de': 'Deutsch',
+                'lang.ru': 'Русский',
+                'header.title': 'VoiceCafe TTS',
+                'header.subtitle': 'Plataforma de Procesamiento de Voz con IA',
+                'header.feature1': '154 Idiomas 650 Voces',
+                'header.feature2': 'Generación Ultra-Rápida',
+                'header.feature3': 'Código Abierto y Gratis',
+                'header.feature4': 'Múltiples Formatos',
+                'mode.tts': 'Texto a Voz',
+                'mode.transcription': 'Voz a Texto',
+                'mode.stats': 'Estadísticas de Uso',
+                'stats.title': 'Estadísticas de Uso',
+                'stats.subtitle': 'Datos de uso de los últimos 30 días',
+                'stats.totalPageViews': 'Total de Vistas de Página',
+                'stats.totalTtsCalls': 'Total de Llamadas TTS',
+                'stats.totalTtsChars': 'Total de Caracteres TTS',
+                'stats.heatmapTitle': 'Mapa de Calor de Llamadas TTS',
+                'stats.chartTitle': 'Tendencias de Uso',
+                'stats.refresh': 'Actualizar',
+                'stats.chart.pageViews': 'Vistas de Página',
+                'stats.chart.ttsCalls': 'Llamadas TTS',
+                'stats.chart.ttsChars': 'Caracteres TTS',
+                'gender.female': 'Femenino',
+                'gender.male': 'Masculino',
+                'tts.inputMethod': 'Método de Entrada',
+                'tts.manualInput': 'Entrada Manual',
+                'tts.uploadFile': 'Subir Archivo',
+                'tts.inputText': 'Ingresar Texto',
+                'tts.textPlaceholder': 'Ingrese el texto a convertir en voz, admite español, inglés, números, etc...',
+                'tts.uploadTxtFile': 'Subir Archivo de Texto',
+                'tts.dropFileHint': 'Arrastre un archivo de texto aquí o haga clic para seleccionar',
+                'tts.fileFormatHint': 'Admite archivos .txt, máximo 10MB',
+                'tts.localeSelect': 'Seleccionar Idioma',
+                'tts.loading': 'Cargando...',
+                'tts.voiceSelect': 'Seleccionar Voz',
+                'tts.selectLocaleFirst': 'Por favor seleccione un idioma primero',
+                'tts.styleSelect': 'Estilo de Voz',
+                'tts.style.general': '🎭 General',
+                'tts.style.assistant': '🤖 Asistente',
+                'tts.style.chat': '💬 Chat',
+                'tts.style.customerservice': '📞 Servicio al Cliente',
+                'tts.style.newscast': '📰 Noticiero',
+                'tts.style.affectionate': '💕 Afectuoso',
+                'tts.style.calm': '😌 Calmado',
+                'tts.style.cheerful': '😊 Alegre',
+                'tts.style.gentle': '🌸 Suave',
+                'tts.style.lyrical': '🎵 Lírico',
+                'tts.style.serious': '😐 Serio',
+                'tts.speedControl': 'Control de Velocidad',
+                'tts.pitchControl': 'Control de Tono',
+                'speed.verySlow': '🐌 Muy Lento',
+                'speed.slow': '🚶 Lento',
+                'speed.normal': '⚡ Normal',
+                'speed.fast': '🏃 Rápido',
+                'speed.veryFast': '🚀 Muy Rápido',
+                'speed.ultraFast': '💨 Ultra Rápido',
+                'pitch.veryLow': '📉 Muy Bajo',
+                'pitch.low': '📊 Bajo',
+                'pitch.normal': '🎵 Normal',
+                'pitch.high': '📈 Alto',
+                'pitch.veryHigh': '🎶 Muy Alto',
+                'footer.subtitle': 'Plataforma de Procesamiento de Voz con IA',
+                'footer.privacy.title': 'Declaración de Privacidad',
+                'footer.privacy.noCookies': '🔒 No usamos cookies para rastrear usuarios',
+                'footer.privacy.noStorage': '🗑️ No almacenamos ningún dato subido por el usuario',
+                'footer.privacy.oneTime': '⚡ Todas las conversiones de voz son de un solo uso',
+                'footer.privacy.autoDelete': '✅ Los datos relacionados se eliminan inmediatamente después de la conversión',
+                'footer.openSource.title': 'Código Abierto',
+                'footer.openSource.github': 'Repositorio GitHub',
+                'footer.openSource.ttsSource': 'Fuente TTS',
+                'promotion.title': '🎉 ¡Generación exitosa! ¿Te gusta esta herramienta?',
+                'promotion.subtitle': '¡Dale una estrella a nuestro repositorio de GitHub!',
+                'promotion.starButton': 'Star on GitHub',
+                'promotion.projectTitle': '⭐ VoiceCafe TTS - Plataforma de Voz de Código Abierto',
+                'promotion.projectDesc': 'Herramienta de procesamiento de voz IA completamente gratuita y de código abierto, compatible con 154 idiomas y 650 voces',
+                'promotion.benefit1': '650 voces de alta calidad',
+                'promotion.benefit2': 'Completamente de código abierto, código transparente y auditable',
+                'promotion.benefit3': 'Sin registro requerido, completamente gratis',
+                'promotion.benefit4': 'Protección de privacidad, no almacenamos datos de usuario',
+                'tts.generateBtn': 'Generar Voz',
+                'tts.generating': 'Generando...',
+                'tts.downloadAudio': 'Descargar Audio',
+                'stt.uploadAudio': 'Subir Archivo de Audio',
+                'stt.dropAudioHint': 'Arrastre un archivo de audio aquí o haga clic para seleccionar',
+                'stt.audioFormatHint': 'Admite formatos mp3, wav, m4a, webm, mp4, mpeg, mpga, máximo 25MB',
+                'stt.tokenConfig': 'Configuración de Token',
+                'stt.useDefaultToken': 'Usar Token Predeterminado',
+                'stt.useCustomToken': 'Usar Token Personalizado',
+                'stt.tokenPlaceholder': 'Ingrese su OpenAI API Key',
+                'stt.transcribeBtn': 'Iniciar Transcripción',
+                'stt.transcribing': 'Transcribiendo...',
+                'stt.result': 'Resultado de Transcripción',
+                'stt.resultPlaceholder': 'El resultado de la transcripción se mostrará aquí...',
+                'stt.copyText': 'Copiar Texto',
+                'stt.editText': 'Editar Texto',
+                'stt.convertToSpeech': 'Convertir a Voz'
+            },
+            fr: {
+                'page.title': 'VoiceCafe - Plateforme de Traitement Vocal IA',
+                'page.description': 'VoiceCafe est une plateforme alimentée par IA qui convertit le texte en parole et la parole en texte avec plus de 650 options vocales en 154 langues, traitement ultra-rapide, entièrement gratuit.',
+                'page.keywords': 'texte vers parole,synthèse vocale IA,TTS en ligne,générateur vocal,outils vocaux gratuits,parole vers texte,transcription vocale,TTS multilingue',
+                'lang.current': 'Français',
+                'lang.en': 'English',
+                'lang.zh': '简体中文',
+                'lang.zh-TW': '繁體中文',
+                'lang.ja': '日本語',
+                'lang.ko': '한국어',
+                'lang.es': 'Español',
+                'lang.fr': 'Français',
+                'lang.de': 'Deutsch',
+                'lang.ru': 'Русский',
+                'header.title': 'VoiceCafe TTS',
+                'header.subtitle': 'Plateforme de Traitement Vocal IA',
+                'header.feature1': '154 Langues 650 Voix',
+                'header.feature2': 'Génération Ultra-Rapide',
+                'header.feature3': 'Open Source et Gratuit',
+                'header.feature4': 'Formats Multiples',
+                'mode.tts': 'Texte vers Parole',
+                'mode.transcription': 'Parole vers Texte',
+                'mode.stats': 'Statistiques d\'Utilisation',
+                'stats.title': 'Statistiques d\'Utilisation',
+                'stats.subtitle': 'Données d\'utilisation des 30 derniers jours',
+                'stats.totalPageViews': 'Total des Vues de Page',
+                'stats.totalTtsCalls': 'Total des Appels TTS',
+                'stats.totalTtsChars': 'Total des Caractères TTS',
+                'stats.heatmapTitle': 'Carte de Chaleur des Appels TTS',
+                'stats.chartTitle': 'Tendances d\'Utilisation',
+                'stats.refresh': 'Actualiser',
+                'stats.chart.pageViews': 'Vues de Page',
+                'stats.chart.ttsCalls': 'Appels TTS',
+                'stats.chart.ttsChars': 'Caractères TTS',
+                'gender.female': 'Féminin',
+                'gender.male': 'Masculin',
+                'tts.inputMethod': 'Méthode de Saisie',
+                'tts.manualInput': 'Saisie Manuelle',
+                'tts.uploadFile': 'Télécharger un Fichier',
+                'tts.inputText': 'Saisir le Texte',
+                'tts.textPlaceholder': 'Entrez le texte à convertir en parole, prend en charge le français, l\'anglais, les chiffres, etc...',
+                'tts.uploadTxtFile': 'Télécharger un Fichier Texte',
+                'tts.dropFileHint': 'Glissez-déposez un fichier texte ici ou cliquez pour sélectionner',
+                'tts.fileFormatHint': 'Prend en charge les fichiers .txt, maximum 10MB',
+                'tts.localeSelect': 'Sélectionner la Langue',
+                'tts.loading': 'Chargement...',
+                'tts.voiceSelect': 'Sélectionner la Voix',
+                'tts.selectLocaleFirst': 'Veuillez d\'abord sélectionner une langue',
+                'tts.styleSelect': 'Style de Voix',
+                'tts.style.general': '🎭 Général',
+                'tts.style.assistant': '🤖 Assistant',
+                'tts.style.chat': '💬 Chat',
+                'tts.style.customerservice': '📞 Service Client',
+                'tts.style.newscast': '📰 Journal',
+                'tts.style.affectionate': '💕 Affectueux',
+                'tts.style.calm': '😌 Calme',
+                'tts.style.cheerful': '😊 Joyeux',
+                'tts.style.gentle': '🌸 Doux',
+                'tts.style.lyrical': '🎵 Lyrique',
+                'tts.style.serious': '😐 Sérieux',
+                'tts.speedControl': 'Contrôle de Vitesse',
+                'tts.pitchControl': 'Contrôle de Tonalité',
+                'speed.verySlow': '🐌 Très Lent',
+                'speed.slow': '🚶 Lent',
+                'speed.normal': '⚡ Normal',
+                'speed.fast': '🏃 Rapide',
+                'speed.veryFast': '🚀 Très Rapide',
+                'speed.ultraFast': '💨 Ultra Rapide',
+                'pitch.veryLow': '📉 Très Bas',
+                'pitch.low': '📊 Bas',
+                'pitch.normal': '🎵 Normal',
+                'pitch.high': '📈 Haut',
+                'pitch.veryHigh': '🎶 Très Haut',
+                'footer.subtitle': 'Plateforme de Traitement Vocal IA',
+                'footer.privacy.title': 'Déclaration de Confidentialité',
+                'footer.privacy.noCookies': '🔒 Nous n\'utilisons pas de cookies pour suivre les utilisateurs',
+                'footer.privacy.noStorage': '🗑️ Nous ne stockons aucune donnée téléchargée par l\'utilisateur',
+                'footer.privacy.oneTime': '⚡ Toutes les conversions vocales sont à usage unique',
+                'footer.privacy.autoDelete': '✅ Les données associées sont supprimées immédiatement après la conversion',
+                'footer.openSource.title': 'Open Source',
+                'footer.openSource.github': 'Dépôt GitHub',
+                'footer.openSource.ttsSource': 'Source TTS',
+                'promotion.title': '🎉 Génération réussie ! Vous aimez cet outil ?',
+                'promotion.subtitle': 'Donnez une étoile à notre dépôt GitHub !',
+                'promotion.starButton': 'Star on GitHub',
+                'promotion.projectTitle': '⭐ VoiceCafe TTS - Plateforme Vocale Open Source',
+                'promotion.projectDesc': 'Outil de traitement vocal IA entièrement gratuit et open source, prenant en charge 154 langues et 650 voix',
+                'promotion.benefit1': '650 voix de haute qualité',
+                'promotion.benefit2': 'Entièrement open source, code transparent et auditable',
+                'promotion.benefit3': 'Aucune inscription requise, entièrement gratuit',
+                'promotion.benefit4': 'Protection de la vie privée, aucune donnée utilisateur stockée',
+                'tts.generateBtn': 'Générer la Parole',
+                'tts.generating': 'Génération...',
+                'tts.downloadAudio': 'Télécharger l\'Audio',
+                'stt.uploadAudio': 'Télécharger un Fichier Audio',
+                'stt.dropAudioHint': 'Glissez-déposez un fichier audio ici ou cliquez pour sélectionner',
+                'stt.audioFormatHint': 'Prend en charge les formats mp3, wav, m4a, webm, mp4, mpeg, mpga, maximum 25MB',
+                'stt.tokenConfig': 'Configuration du Token',
+                'stt.useDefaultToken': 'Utiliser le Token par Défaut',
+                'stt.useCustomToken': 'Utiliser un Token Personnalisé',
+                'stt.tokenPlaceholder': 'Entrez votre OpenAI API Key',
+                'stt.transcribeBtn': 'Démarrer la Transcription',
+                'stt.transcribing': 'Transcription...',
+                'stt.result': 'Résultat de la Transcription',
+                'stt.resultPlaceholder': 'Le résultat de la transcription s\'affichera ici...',
+                'stt.copyText': 'Copier le Texte',
+                'stt.editText': 'Modifier le Texte',
+                'stt.convertToSpeech': 'Convertir en Parole'
+            },
+            de: {
+                'page.title': 'VoiceCafe - KI-gestützte Sprachverarbeitungsplattform',
+                'page.description': 'VoiceCafe ist eine KI-gestützte Plattform, die Text in Sprache und Sprache in Text umwandelt, mit über 650 Sprachoptionen in 154 Sprachen, blitzschneller Verarbeitung, völlig kostenlos.',
+                'page.keywords': 'Text zu Sprache,KI-Sprachsynthese,Online-TTS,Sprachgenerator,kostenlose Sprachtools,Sprache zu Text,Sprachtranskription,mehrsprachiges TTS',
+                'lang.current': 'Deutsch',
+                'lang.en': 'English',
+                'lang.zh': '简体中文',
+                'lang.zh-TW': '繁體中文',
+                'lang.ja': '日本語',
+                'lang.ko': '한국어',
+                'lang.es': 'Español',
+                'lang.fr': 'Français',
+                'lang.de': 'Deutsch',
+                'lang.ru': 'Русский',
+                'header.title': 'VoiceCafe TTS',
+                'header.subtitle': 'KI-gestützte Sprachverarbeitungsplattform',
+                'header.feature1': '154 Sprachen 650 Stimmen',
+                'header.feature2': 'Ultra-Schnelle Generierung',
+                'header.feature3': 'Open Source & Kostenlos',
+                'header.feature4': 'Mehrere Formate',
+                'mode.tts': 'Text zu Sprache',
+                'mode.transcription': 'Sprache zu Text',
+                'mode.stats': 'Nutzungsstatistiken',
+                'stats.title': 'Nutzungsstatistiken',
+                'stats.subtitle': 'Nutzungsdaten der letzten 30 Tage',
+                'stats.totalPageViews': 'Gesamte Seitenaufrufe',
+                'stats.totalTtsCalls': 'Gesamte TTS-Aufrufe',
+                'stats.totalTtsChars': 'Gesamte TTS-Zeichen',
+                'stats.heatmapTitle': 'TTS-Aufruf-Heatmap',
+                'stats.chartTitle': 'Nutzungstrends',
+                'stats.refresh': 'Aktualisieren',
+                'stats.chart.pageViews': 'Seitenaufrufe',
+                'stats.chart.ttsCalls': 'TTS-Aufrufe',
+                'stats.chart.ttsChars': 'TTS-Zeichen',
+                'gender.female': 'Weiblich',
+                'gender.male': 'Männlich',
+                'tts.inputMethod': 'Eingabemethode',
+                'tts.manualInput': 'Manuelle Eingabe',
+                'tts.uploadFile': 'Datei Hochladen',
+                'tts.inputText': 'Text Eingeben',
+                'tts.textPlaceholder': 'Geben Sie den Text ein, der in Sprache umgewandelt werden soll, unterstützt Deutsch, Englisch, Zahlen usw...',
+                'tts.uploadTxtFile': 'Textdatei Hochladen',
+                'tts.dropFileHint': 'Ziehen Sie eine Textdatei hierher oder klicken Sie zum Auswählen',
+                'tts.fileFormatHint': 'Unterstützt .txt-Dateien, maximal 10MB',
+                'tts.localeSelect': 'Sprache Auswählen',
+                'tts.loading': 'Laden...',
+                'tts.voiceSelect': 'Stimme Auswählen',
+                'tts.selectLocaleFirst': 'Bitte wählen Sie zuerst eine Sprache',
+                'tts.styleSelect': 'Stimmstil',
+                'tts.style.general': '🎭 Allgemein',
+                'tts.style.assistant': '🤖 Assistent',
+                'tts.style.chat': '💬 Chat',
+                'tts.style.customerservice': '📞 Kundenservice',
+                'tts.style.newscast': '📰 Nachrichten',
+                'tts.style.affectionate': '💕 Liebevoll',
+                'tts.style.calm': '😌 Ruhig',
+                'tts.style.cheerful': '😊 Fröhlich',
+                'tts.style.gentle': '🌸 Sanft',
+                'tts.style.lyrical': '🎵 Lyrisch',
+                'tts.style.serious': '😐 Ernst',
+                'tts.speedControl': 'Geschwindigkeitskontrolle',
+                'tts.pitchControl': 'Tonhöhenkontrolle',
+                'speed.verySlow': '🐌 Sehr Langsam',
+                'speed.slow': '🚶 Langsam',
+                'speed.normal': '⚡ Normal',
+                'speed.fast': '🏃 Schnell',
+                'speed.veryFast': '🚀 Sehr Schnell',
+                'speed.ultraFast': '💨 Ultra Schnell',
+                'pitch.veryLow': '📉 Sehr Tief',
+                'pitch.low': '📊 Tief',
+                'pitch.normal': '🎵 Normal',
+                'pitch.high': '📈 Hoch',
+                'pitch.veryHigh': '🎶 Sehr Hoch',
+                'footer.subtitle': 'IA-Sprachverarbeitungsplattform',
+                'footer.privacy.title': 'Datenschutzerklärung',
+                'footer.privacy.noCookies': '🔒 Wir verwenden keine Cookies zur Benutzerverfolgung',
+                'footer.privacy.noStorage': '🗑️ Wir speichern keine hochgeladenen Benutzerdaten',
+                'footer.privacy.oneTime': '⚡ Alle Sprachkonvertierungen sind einmalig',
+                'footer.privacy.autoDelete': '✅ Zugehörige Daten werden nach der Konvertierung sofort gelöscht',
+                'footer.openSource.title': 'Open Source',
+                'footer.openSource.github': 'GitHub-Repository',
+                'footer.openSource.ttsSource': 'TTS-Quelle',
+                'promotion.title': '🎉 Generierung erfolgreich! Gefällt Ihnen dieses Tool?',
+                'promotion.subtitle': 'Geben Sie unserem GitHub-Repository einen Stern!',
+                'promotion.starButton': 'Star on GitHub',
+                'promotion.projectTitle': '⭐ VoiceCafe TTS - Open-Source-Sprachplattform',
+                'promotion.projectDesc': 'Völlig kostenloses und quelloffenes KI-Sprachverarbeitungstool, unterstützt 154 Sprachen und 650 Stimmen',
+                'promotion.benefit1': '650 hochwertige Stimmen',
+                'promotion.benefit2': 'Vollständig Open Source, transparenter und überprüfbarer Code',
+                'promotion.benefit3': 'Keine Registrierung erforderlich, völlig kostenlos',
+                'promotion.benefit4': 'Datenschutz, keine Speicherung von Benutzerdaten',
+                'tts.generateBtn': 'Sprache Generieren',
+                'tts.generating': 'Generierung...',
+                'tts.downloadAudio': 'Audio Herunterladen',
+                'stt.uploadAudio': 'Audiodatei Hochladen',
+                'stt.dropAudioHint': 'Ziehen Sie eine Audiodatei hierher oder klicken Sie zum Auswählen',
+                'stt.audioFormatHint': 'Unterstützt mp3, wav, m4a, webm, mp4, mpeg, mpga Formate, maximal 25MB',
+                'stt.tokenConfig': 'Token-Konfiguration',
+                'stt.useDefaultToken': 'Standard-Token Verwenden',
+                'stt.useCustomToken': 'Benutzerdefinierten Token Verwenden',
+                'stt.tokenPlaceholder': 'Geben Sie Ihren OpenAI API Key ein',
+                'stt.transcribeBtn': 'Transkription Starten',
+                'stt.transcribing': 'Transkribieren...',
+                'stt.result': 'Transkriptionsergebnis',
+                'stt.resultPlaceholder': 'Das Transkriptionsergebnis wird hier angezeigt...',
+                'stt.copyText': 'Text Kopieren',
+                'stt.editText': 'Text Bearbeiten',
+                'stt.convertToSpeech': 'In Sprache Umwandeln'
+            },
+            ru: {
+                'page.title': 'VoiceCafe - ИИ-платформа обработки голоса',
+                'page.description': 'VoiceCafe - это платформа на базе ИИ, которая преобразует текст в речь и речь в текст с более чем 650 голосовыми опциями на 154 языках, молниеносной обработкой, совершенно бесплатно.',
+                'page.keywords': 'текст в речь,ИИ синтез речи,онлайн TTS,генератор голоса,бесплатные голосовые инструменты,речь в текст,транскрипция речи,многоязычный TTS',
+                'lang.current': 'Русский',
+                'lang.en': 'English',
+                'lang.zh': '简体中文',
+                'lang.zh-TW': '繁體中文',
+                'lang.ja': '日本語',
+                'lang.ko': '한국어',
+                'lang.es': 'Español',
+                'lang.fr': 'Français',
+                'lang.de': 'Deutsch',
+                'lang.ru': 'Русский',
+                'header.title': 'VoiceCafe TTS',
+                'header.subtitle': 'ИИ-платформа обработки голоса',
+                'header.feature1': '154 языка 650 голосов',
+                'header.feature2': 'Сверхбыстрая Генерация',
+                'header.feature3': 'Открытый Исходный Код',
+                'header.feature4': 'Несколько Форматов',
+                'mode.tts': 'Текст в Речь',
+                'mode.transcription': 'Речь в Текст',
+                'mode.stats': 'Статистика Использования',
+                'stats.title': 'Статистика Использования',
+                'stats.subtitle': 'Данные использования за последние 30 дней',
+                'stats.totalPageViews': 'Всего Просмотров Страниц',
+                'stats.totalTtsCalls': 'Всего Вызовов TTS',
+                'stats.totalTtsChars': 'Всего Символов TTS',
+                'stats.heatmapTitle': 'Тепловая Карта Вызовов TTS',
+                'stats.chartTitle': 'Тенденции Использования',
+                'stats.refresh': 'Обновить',
+                'stats.chart.pageViews': 'Просмотры Страниц',
+                'stats.chart.ttsCalls': 'Вызовы TTS',
+                'stats.chart.ttsChars': 'Символы TTS',
+                'gender.female': 'Женский',
+                'gender.male': 'Мужской',
+                'tts.inputMethod': 'Метод Ввода',
+                'tts.manualInput': 'Ручной Ввод',
+                'tts.uploadFile': 'Загрузить Файл',
+                'tts.inputText': 'Ввести Текст',
+                'tts.textPlaceholder': 'Введите текст для преобразования в речь, поддерживается русский, английский, цифры и т.д...',
+                'tts.uploadTxtFile': 'Загрузить Текстовый Файл',
+                'tts.dropFileHint': 'Перетащите текстовый файл сюда или нажмите для выбора',
+                'tts.fileFormatHint': 'Поддерживаются файлы .txt, максимум 10MB',
+                'tts.localeSelect': 'Выбрать Язык',
+                'tts.loading': 'Загрузка...',
+                'tts.voiceSelect': 'Выбрать Голос',
+                'tts.selectLocaleFirst': 'Пожалуйста, сначала выберите язык',
+                'tts.styleSelect': 'Стиль Голоса',
+                'tts.style.general': '🎭 Общий',
+                'tts.style.assistant': '🤖 Ассистент',
+                'tts.style.chat': '💬 Чат',
+                'tts.style.customerservice': '📞 Служба Поддержки',
+                'tts.style.newscast': '📰 Новости',
+                'tts.style.affectionate': '💕 Ласковый',
+                'tts.style.calm': '😌 Спокойный',
+                'tts.style.cheerful': '😊 Веселый',
+                'tts.style.gentle': '🌸 Нежный',
+                'tts.style.lyrical': '🎵 Лирический',
+                'tts.style.serious': '😐 Серьезный',
+                'tts.speedControl': 'Контроль Скорости',
+                'tts.pitchControl': 'Контроль Тона',
+                'speed.verySlow': '🐌 Очень Медленно',
+                'speed.slow': '🚶 Медленно',
+                'speed.normal': '⚡ Нормально',
+                'speed.fast': '🏃 Быстро',
+                'speed.veryFast': '🚀 Очень Быстро',
+                'speed.ultraFast': '💨 Сверхбыстро',
+                'pitch.veryLow': '📉 Очень Низкий',
+                'pitch.low': '📊 Низкий',
+                'pitch.normal': '🎵 Нормальный',
+                'pitch.high': '📈 Высокий',
+                'pitch.veryHigh': '🎶 Очень Высокий',
+                'footer.subtitle': 'ИИ-платформа обработки голоса',
+                'footer.privacy.title': 'Заявление о Конфиденциальности',
+                'footer.privacy.noCookies': '🔒 Мы не используем файлы cookie для отслеживания пользователей',
+                'footer.privacy.noStorage': '🗑️ Мы не храним загруженные пользователем данные',
+                'footer.privacy.oneTime': '⚡ Все голосовые преобразования одноразовые',
+                'footer.privacy.autoDelete': '✅ Связанные данные удаляются сразу после преобразования',
+                'footer.openSource.title': 'Открытый Исходный Код',
+                'footer.openSource.github': 'Репозиторий GitHub',
+                'footer.openSource.ttsSource': 'Источник TTS',
+                'promotion.title': '🎉 Генерация успешна! Нравится этот инструмент?',
+                'promotion.subtitle': 'Поставьте звезду нашему репозиторию GitHub!',
+                'promotion.starButton': 'Star on GitHub',
+                'promotion.projectTitle': '⭐ VoiceCafe TTS - Платформа Голоса с Открытым Исходным Кодом',
+                'promotion.projectDesc': 'Полностью бесплатный инструмент обработки голоса ИИ с открытым исходным кодом, поддерживающий 154 языка и 650 голосов',
+                'promotion.benefit1': '650 высококачественных голосов',
+                'promotion.benefit2': 'Полностью открытый исходный код, прозрачный и проверяемый',
+                'promotion.benefit3': 'Без регистрации, полностью бесплатно',
+                'promotion.benefit4': 'Защита конфиденциальности, не храним данные пользователей',
+                'tts.generateBtn': 'Генерировать Речь',
+                'tts.generating': 'Генерация...',
+                'tts.downloadAudio': 'Скачать Аудио',
+                'stt.uploadAudio': 'Загрузить Аудиофайл',
+                'stt.dropAudioHint': 'Перетащите аудиофайл сюда или нажмите для выбора',
+                'stt.audioFormatHint': 'Поддерживаются форматы mp3, wav, m4a, webm, mp4, mpeg, mpga, максимум 25MB',
+                'stt.tokenConfig': 'Настройка Токена',
+                'stt.useDefaultToken': 'Использовать Токен по Умолчанию',
+                'stt.useCustomToken': 'Использовать Пользовательский Токен',
+                'stt.tokenPlaceholder': 'Введите ваш OpenAI API Key',
+                'stt.transcribeBtn': 'Начать Транскрипцию',
+                'stt.transcribing': 'Транскрипция...',
+                'stt.result': 'Результат Транскрипции',
+                'stt.resultPlaceholder': 'Результат транскрипции будет отображен здесь...',
+                'stt.copyText': 'Копировать Текст',
+                'stt.editText': 'Редактировать Текст',
+                'stt.convertToSpeech': 'Преобразовать в Речь'
+            }
+        };
+
+        // 添加繁体中文翻译
+        translations['zh-TW'] = {
+            'page.title': 'VoiceCafe - AI驅動的語音處理平台',
+            'page.description': 'VoiceCafe是一個AI驅動的平台，支援文字轉語音和語音轉文字，擁有650+種語音選項，覆蓋154種語言，閃電般的處理速度，完全免費使用。',
+            'page.keywords': '文字轉語音,AI語音合成,線上TTS,語音產生器,免費語音工具,語音轉文字,語音轉錄,多語言TTS',
+            'lang.current': '繁體中文',
+            'lang.en': 'English',
+            'lang.zh': '简体中文',
+            'lang.zh-TW': '繁體中文',
+            'lang.ja': '日本語',
+            'lang.ko': '한국어',
+            'lang.es': 'Español',
+            'lang.fr': 'Français',
+            'lang.de': 'Deutsch',
+            'lang.ru': 'Русский',
+            'header.title': 'VoiceCafe TTS',
+            'header.subtitle': 'AI驅動的語音處理平台',
+            'header.feature1': '154種語言 650種語音',
+            'header.feature2': '超快生成速度',
+            'header.feature3': '完全開源免費',
+            'header.feature4': '多種輸出格式',
+            'mode.tts': '文字轉語音',
+            'mode.transcription': '語音轉文字',
+            'mode.stats': '使用量統計',
+            'stats.title': '使用量統計',
+            'stats.subtitle': '過去30天的使用資料統計',
+            'stats.totalPageViews': '總頁面訪問量',
+            'stats.totalTtsCalls': '總TTS呼叫次數',
+            'stats.totalTtsChars': '總TTS字元數',
+            'stats.heatmapTitle': 'TTS呼叫熱力圖',
+            'stats.chartTitle': '使用趨勢',
+            'stats.refresh': '重新整理',
+            'stats.chart.pageViews': '頁面訪問數',
+            'stats.chart.ttsCalls': 'TTS呼叫次數',
+            'stats.chart.ttsChars': 'TTS字元數',
+            'gender.female': '女性',
+            'gender.male': '男性',
+            'tts.inputMethod': '選擇輸入方式',
+            'tts.manualInput': '手動輸入',
+            'tts.uploadFile': '上傳檔案',
+            'tts.inputText': '輸入文字',
+            'tts.textPlaceholder': '請輸入要轉換為語音的文字內容，支援中文、英文、數字等...',
+            'tts.uploadTxtFile': '上傳文字檔案',
+            'tts.dropFileHint': '拖曳文字檔案到此處，或點擊選擇檔案',
+            'tts.fileFormatHint': '支援 .txt 檔案，最大 10MB',
+            'tts.localeSelect': '選擇語言',
+            'tts.loading': '載入中...',
+            'tts.voiceSelect': '選擇語音',
+            'tts.selectLocaleFirst': '請先選擇語言',
+            'tts.styleSelect': '語音風格',
+            'tts.style.general': '🎭 通用風格',
+            'tts.style.assistant': '🤖 智慧助手',
+            'tts.style.chat': '💬 聊天對話',
+            'tts.style.customerservice': '📞 客服服務',
+            'tts.style.newscast': '📰 新聞播報',
+            'tts.style.affectionate': '💕 親切溫柔',
+            'tts.style.calm': '😌 平靜沉穩',
+            'tts.style.cheerful': '😊 歡快愉悅',
+            'tts.style.gentle': '🌸 溫和柔美',
+            'tts.style.lyrical': '🎵 抒情優美',
+            'tts.style.serious': '😐 嚴肅正式',
+            'tts.speedControl': '語速控制',
+            'tts.pitchControl': '音調控制',
+            'speed.verySlow': '🐌 很慢',
+            'speed.slow': '🚶 慢速',
+            'speed.normal': '⚡ 正常',
+            'speed.fast': '🏃 快速',
+            'speed.veryFast': '🚀 很快',
+            'speed.ultraFast': '💨 極速',
+            'pitch.veryLow': '📉 很低沉',
+            'pitch.low': '📊 低沉',
+            'pitch.normal': '🎵 標準',
+            'pitch.high': '📈 高亢',
+            'pitch.veryHigh': '🎶 很高亢',
+            'footer.subtitle': 'AI驅動的語音處理平台',
+            'footer.privacy.title': '隱私聲明',
+            'footer.privacy.noCookies': '🔒 我們不使用 Cookie 追蹤使用者',
+            'footer.privacy.noStorage': '🗑️ 不儲存使用者上傳的任何資料',
+            'footer.privacy.oneTime': '⚡ 所有語音轉換都是一次性的',
+            'footer.privacy.autoDelete': '✅ 轉換完成後相關資料立即刪除',
+            'footer.openSource.title': '開源專案',
+            'footer.openSource.github': 'GitHub 儲存庫',
+            'footer.openSource.ttsSource': 'TTS 來源',
+            'promotion.title': '🎉 生成成功！喜歡這個工具嗎？',
+            'promotion.subtitle': '給我們的 GitHub 儲存庫點個 Star 吧！',
+            'promotion.starButton': 'Star on GitHub',
+            'promotion.projectTitle': '⭐ VoiceCafe TTS - 開源語音處理平台',
+            'promotion.projectDesc': '完全開源免費的 AI 語音處理工具，支援 154 種語言和 650 種語音',
+            'promotion.benefit1': '650 種高品質語音',
+            'promotion.benefit2': '完全開源，程式碼透明可稽核',
+            'promotion.benefit3': '無需註冊，完全免費使用',
+            'promotion.benefit4': '隱私保護，不儲存使用者資料',
+            'tts.generateBtn': '生成語音',
+            'tts.generating': '生成中...',
+            'tts.downloadAudio': '下載音訊',
+            'stt.uploadAudio': '上傳音訊檔案',
+            'stt.dropAudioHint': '拖曳音訊檔案到此處，或點擊選擇檔案',
+            'stt.audioFormatHint': '支援 mp3, wav, m4a, webm, mp4, mpeg, mpga 格式，最大 25MB',
+            'stt.tokenConfig': 'Token 設定',
+            'stt.useDefaultToken': '使用預設 Token',
+            'stt.useCustomToken': '使用自訂 Token',
+            'stt.tokenPlaceholder': '請輸入您的 OpenAI API Key',
+            'stt.transcribeBtn': '開始轉錄',
+            'stt.transcribing': '轉錄中...',
+            'stt.result': '轉錄結果',
+            'stt.resultPlaceholder': '轉錄結果將顯示在這裡...',
+            'stt.copyText': '複製文字',
+            'stt.editText': '編輯文字',
+            'stt.convertToSpeech': '轉換為語音'
+        };
+
+        // 国际化功能
+        // UI语言到语音locale的映射
+        function getVoiceLocalesForUILang(uiLang) {
+            const mapping = {
+                'en': 'en-US',
+                'zh': 'zh-CN',
+                'zh-TW': 'yue-CN+zh-HK+zh-TW',
+                'ja': 'ja-JP',
+                'ko': 'ko-KR',
+                'es': 'es-ES',
+                'fr': 'fr-FR',
+                'de': 'de-DE',
+                'ru': 'ru-RU'
+            };
+            return mapping[uiLang] || 'en-US';
+        }
+
+        // UI语言到默认TTS语言的映射（单个locale）
+        function getDefaultLocaleForUILang(uiLang) {
+            const mapping = {
+                'en': 'en-US',
+                'zh': 'zh-CN',
+                'zh-TW': 'zh-TW',
+                'ja': 'ja-JP',
+                'ko': 'ko-KR',
+                'es': 'es-ES',
+                'fr': 'fr-FR',
+                'de': 'de-DE',
+                'ru': 'ru-RU'
+            };
+            return mapping[uiLang] || 'zh-CN';
+        }
+
+        function detectLanguage() {
+            // 检测浏览器语言
+            const browserLang = navigator.language || navigator.userLanguage;
+
+            // 检查完整语言代码（如 zh-TW）
+            if (translations[browserLang]) {
+                return browserLang;
+            }
+
+            // 检查短语言代码（如 zh）
+            const shortLang = browserLang.split('-')[0];
+            if (translations[shortLang]) {
+                return shortLang;
+            }
+
+            // 默认返回英语
+            return 'en';
+        }
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            localStorage.setItem('voicecraft-language', lang);
+
+            // 更新页面语言属性
+            let htmlLang = lang;
+            if (lang === 'zh') {
+                htmlLang = 'zh-CN';
+            } else if (lang === 'zh-TW') {
+                htmlLang = 'zh-TW';
+            }
+            document.documentElement.lang = htmlLang;
+
+            // 应用翻译
+            applyTranslations();
+
+            // 更新语言切换器
+            updateLanguageSwitcher();
+        }
+
+        function applyTranslations() {
+            const langData = translations[currentLanguage];
+
+            // 更新所有带有 data-i18n 属性的元素
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (langData[key]) {
+                    element.textContent = langData[key];
+                }
+            });
+
+            // 更新 placeholder 属性
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-i18n-placeholder');
+                if (langData[key]) {
+                    element.setAttribute('placeholder', langData[key]);
+                }
+            });
+
+            // 更新 title 属性
+            document.querySelectorAll('[data-i18n-title]').forEach(element => {
+                const key = element.getAttribute('data-i18n-title');
+                if (langData[key]) {
+                    element.setAttribute('title', langData[key]);
+                }
+            });
+
+            // 更新 meta 标签
+            document.querySelectorAll('[data-i18n-content]').forEach(element => {
+                const key = element.getAttribute('data-i18n-content');
+                if (langData[key]) {
+                    element.setAttribute('content', langData[key]);
+                }
+            });
+
+            // 更新页面标题
+            if (langData['page.title']) {
+                document.title = langData['page.title'];
+            }
+
+            // 刷新语音选择框（如果已加载）
+            const localeSelect = document.getElementById('locale');
+            if (localeSelect && localeSelect.value) {
+                const currentLocale = localeSelect.value;
+                updateVoiceOptions(currentLocale);
+            }
+
+            // 刷新 echarts 图表（如果已渲染）
+            if (statsCache && statsChart) {
+                renderChart(statsCache.daily);
+            }
+
+            // 更新 TTS 源链接
+            updateTTSSourceLink();
+        }
+
+        function updateTTSSourceLink() {
+            const ttsSourceLink = document.getElementById('ttsSourceLink');
+            if (ttsSourceLink) {
+                const voiceLocales = getVoiceLocalesForUILang(currentLanguage);
+                const currentHost = window.location.origin;
+                // URL encode the + sign to %2B
+                const encodedLocales = voiceLocales.replace(/\+/g, '%2B');
+                ttsSourceLink.href = `${currentHost}/tts.json?lang=${encodedLocales}`;
+            }
+        }
+
+        function updateLanguageSwitcher() {
+            const langFlags = {
+                'en': '🇺🇸',
+                'zh': '🇨🇳',
+                'zh-TW': '🇨🇳',
+                'ja': '🇯🇵',
+                'ko': '🇰🇷',
+                'es': '🇪🇸',
+                'fr': '🇫🇷',
+                'de': '🇩🇪',
+                'ru': '🇷🇺'
+            };
+            
+            const langData = translations[currentLanguage];
+            document.getElementById('currentLangFlag').textContent = langFlags[currentLanguage];
+            document.getElementById('currentLangName').textContent = langData['lang.current'];
+            
+            // 更新选中状态
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.classList.remove('active');
+                if (option.getAttribute('data-lang') === currentLanguage) {
+                    option.classList.add('active');
+                }
+            });
+        }
+
+        // 加载语言列表
+        async function loadLocales() {
+            const localeSelect = document.getElementById('locale');
+
+            // 显示加载中状态
+            localeSelect.innerHTML = '<option value="">加载中...</option>';
+            localeSelect.disabled = true;
+
+            try {
+                const response = await fetch('/v1/locales');
+                const data = await response.json();
+
+                localeSelect.innerHTML = '<option value="">请选择语言</option>';
+
+                // 添加所有语言选项
+                data.locales.forEach(locale => {
+                    const option = document.createElement('option');
+                    option.value = locale;
+                    option.textContent = locale;
+                    localeSelect.appendChild(option);
+                });
+
+                localeSelect.disabled = false;
+
+                // 根据当前界面语言选择默认语言
+                const defaultLocale = getDefaultLocaleForUILang(currentLanguage);
+                localeSelect.value = defaultLocale;
+                await loadVoices(defaultLocale);
+            } catch (error) {
+                console.error('加载语言列表失败:', error);
+                localeSelect.innerHTML = '<option value="">加载失败，请刷新</option>';
+                localeSelect.disabled = false;
+            }
+        }
+
+        // 加载指定语言的语音列表
+        // 缓存已加载的语音数据，避免重复请求
+        let voicesCache = {};
+
+        async function loadVoices(locale) {
+            const voiceSelect = document.getElementById('voice');
+
+            if (!locale) {
+                voiceSelect.innerHTML = '<option value="">请先选择语言</option>';
+                return;
+            }
+
+            // 显示加载中状态
+            voiceSelect.innerHTML = '<option value="">加载中...</option>';
+            voiceSelect.disabled = true;
+
+            try {
+                // 如果缓存中没有，则请求 API
+                if (!voicesCache[locale]) {
+                    const response = await fetch(`/v1/voices?locale=${locale}`);
+                    const data = await response.json();
+
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+
+                    voicesCache[locale] = data.voices;
+                }
+
+                const currentValue = voiceSelect.value; // 保存当前选中的值
+                voiceSelect.innerHTML = '';
+
+                // 按 localName 排序（前端排序，支持中英文混合）
+                const sortedVoices = voicesCache[locale].sort((a, b) => {
+                    return a.localName.localeCompare(b.localName, undefined, { sensitivity: 'base' });
+                });
+
+                sortedVoices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.value = voice.shortName;
+                    // 翻译性别
+                    const genderText = voice.gender === 'Female' ? translations[currentLanguage]['gender.female'] :
+                                      voice.gender === 'Male' ? translations[currentLanguage]['gender.male'] :
+                                      voice.gender;
+                    option.textContent = `${voice.localName} (${genderText})`;
+                    voiceSelect.appendChild(option);
+                });
+
+                voiceSelect.disabled = false;
+
+                // 恢复之前选中的值，如果不存在则选择第一个
+                if (currentValue && sortedVoices.find(v => v.shortName === currentValue)) {
+                    voiceSelect.value = currentValue;
+                } else if (sortedVoices.length > 0) {
+                    voiceSelect.value = sortedVoices[0].shortName;
+                }
+            } catch (error) {
+                console.error('加载语音列表失败:', error);
+                voiceSelect.innerHTML = '<option value="">加载失败，请重试</option>';
+                voiceSelect.disabled = false;
+            }
+        }
+
+        // 刷新语音选择器的翻译（不重新请求 API）
+        function updateVoiceOptions(locale) {
+            if (!voicesCache[locale]) {
+                return; // 如果还没加载过，不做任何操作
+            }
+
+            const voiceSelect = document.getElementById('voice');
+            const currentValue = voiceSelect.value; // 保存当前选中的值
+
+            // 按 localName 排序
+            const sortedVoices = voicesCache[locale].sort((a, b) => {
+                return a.localName.localeCompare(b.localName, undefined, { sensitivity: 'base' });
+            });
+
+            // 更新每个 option 的文本
+            Array.from(voiceSelect.options).forEach((option, index) => {
+                if (sortedVoices[index]) {
+                    const voice = sortedVoices[index];
+                    const genderText = voice.gender === 'Female' ? translations[currentLanguage]['gender.female'] :
+                                      voice.gender === 'Male' ? translations[currentLanguage]['gender.male'] :
+                                      voice.gender;
+                    option.textContent = `${voice.localName} (${genderText})`;
+                }
+            });
+
+            // 恢复选中的值
+            voiceSelect.value = currentValue;
+        }
+
+        // 初始化语言和语音选择器
+        function initializeVoiceSelector() {
+            const localeSelect = document.getElementById('locale');
+
+            // 监听语言选择变化
+            localeSelect.addEventListener('change', async function() {
+                const selectedLocale = this.value;
+                await loadVoices(selectedLocale);
+            });
+
+            // 加载语言列表
+            loadLocales();
+        }
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化国际化
+            initializeI18n();
+
+            // 初始化深色模式
+            initializeDarkMode();
+
+            // 初始化滑块
+            initializeSliders();
+
+            // 初始化其他功能
+            initializeInputMethodTabs();
+            initializeFileUpload();
+            initializeModeSwitcher();
+            initializeAudioUpload();
+            initializeTokenConfig();
+            initializeLanguageSwitcher();
+
+            // 检查统计功能是否启用
+            checkStatsEnabled();
+
+            // 延迟加载语音选择器（显示加载中状态）
+            setTimeout(() => {
+                initializeVoiceSelector();
+            }, 100);
+        });
+
+        // 初始化输入方式切换
+        function initializeInputMethodTabs() {
+            const textInputTab = document.getElementById('textInputTab');
+            const fileUploadTab = document.getElementById('fileUploadTab');
+            const textInputArea = document.getElementById('textInputArea');
+            const fileUploadArea = document.getElementById('fileUploadArea');
+
+            textInputTab.addEventListener('click', function() {
+                currentInputMethod = 'text';
+                textInputTab.classList.add('active');
+                fileUploadTab.classList.remove('active');
+                textInputArea.style.display = 'block';
+                fileUploadArea.style.display = 'none';
+                document.getElementById('text').required = true;
+            });
+
+            fileUploadTab.addEventListener('click', function() {
+                currentInputMethod = 'file';
+                fileUploadTab.classList.add('active');
+                textInputTab.classList.remove('active');
+                textInputArea.style.display = 'none';
+                fileUploadArea.style.display = 'block';
+                document.getElementById('text').required = false;
+            });
+        }
+
+        // 初始化文件上传功能
+        function initializeFileUpload() {
+            const fileDropZone = document.getElementById('fileDropZone');
+            const fileInput = document.getElementById('fileInput');
+            const fileInfo = document.getElementById('fileInfo');
+            const fileRemoveBtn = document.getElementById('fileRemoveBtn');
+
+            // 点击上传区域
+            fileDropZone.addEventListener('click', function() {
+                fileInput.click();
+            });
+
+            // 文件选择
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    handleFileSelect(file);
+                }
+            });
+
+            // 拖拽功能
+            fileDropZone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                fileDropZone.classList.add('dragover');
+            });
+
+            fileDropZone.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                fileDropZone.classList.remove('dragover');
+            });
+
+            fileDropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                fileDropZone.classList.remove('dragover');
+                const file = e.dataTransfer.files[0];
+                if (file) {
+                    handleFileSelect(file);
+                }
+            });
+
+            // 移除文件
+            fileRemoveBtn.addEventListener('click', function() {
+                selectedFile = null;
+                fileInput.value = '';
+                fileInfo.style.display = 'none';
+                fileDropZone.style.display = 'block';
+            });
+        }
+
+        // 处理文件选择
+        function handleFileSelect(file) {
+            // 验证文件类型
+            if (!file.type.includes('text/') && !file.name.toLowerCase().endsWith('.txt')) {
+                alert('请选择txt格式的文本文件');
+                return;
+            }
+
+            // 验证文件大小
+            if (file.size > 500 * 1024) {
+                alert('文件大小不能超过500KB');
+                return;
+            }
+
+            selectedFile = file;
+            
+            // 显示文件信息
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = formatFileSize(file.size);
+            document.getElementById('fileInfo').style.display = 'flex';
+            document.getElementById('fileDropZone').style.display = 'none';
+        }
+
+        // 格式化文件大小
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // 表单提交处理
+        document.getElementById('ttsForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const voice = document.getElementById('voice').value;
+            const speed = document.getElementById('speed').value;
+            const pitch = document.getElementById('pitch').value;
+            const style = document.getElementById('style').value;
+            const outputFormat = document.getElementById('outputFormat').value;
+            
+            const generateBtn = document.getElementById('generateBtn');
+            const resultContainer = document.getElementById('result');
+            const loading = document.getElementById('loading');
+            const success = document.getElementById('success');
+            const error = document.getElementById('error');
+            
+            // 验证输入
+            if (currentInputMethod === 'text') {
+                const text = document.getElementById('text').value;
+                if (!text.trim()) {
+                    alert('请输入要转换的文本内容');
+                    return;
+                }
+            } else if (currentInputMethod === 'file') {
+                if (!selectedFile) {
+                    alert('请选择要上传的txt文件');
+                    return;
+                }
+            }
+            
+            // 重置状态
+            resultContainer.style.display = 'block';
+            loading.style.display = 'block';
+            success.style.display = 'none';
+            error.style.display = 'none';
+            generateBtn.disabled = true;
+            generateBtn.textContent = '生成中...';
+            
+            try {
+                let response;
+                let textLength = 0;
+                
+                // 更新加载提示
+                const loadingText = document.getElementById('loadingText');
+                const progressInfo = document.getElementById('progressInfo');
+                
+                if (currentInputMethod === 'text') {
+                    // 手动输入文本
+                    const text = document.getElementById('text').value;
+                    textLength = text.length;
+                    
+                    // 根据文本长度显示不同的提示
+                    if (textLength > 3000) {
+                        loadingText.textContent = '正在处理长文本，请耐心等待...';
+                        progressInfo.textContent = '文本长度: ' + textLength + ' 字符，预计需要 ' + (Math.ceil(textLength / 1500) * 2) + ' 秒';
+                    } else {
+                        loadingText.textContent = '正在生成语音，请稍候...';
+                        progressInfo.textContent = '文本长度: ' + textLength + ' 字符';
+                    }
+                    
+                    response = await fetch('/v1/audio/speech', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            input: text,
+                            voice: voice,
+                            speed: parseFloat(speed),
+                            pitch: pitch,
+                            style: style,
+                            response_format: outputFormat
+                        })
+                    });
+                } else {
+                    // 文件上传
+                    loadingText.textContent = '正在处理上传的文件...';
+                    progressInfo.textContent = '文件: ' + selectedFile.name + ' (' + formatFileSize(selectedFile.size) + ')';
+
+                    const formData = new FormData();
+                    formData.append('file', selectedFile);
+                    formData.append('voice', voice);
+                    formData.append('speed', speed);
+                    formData.append('pitch', pitch);
+                    formData.append('style', style);
+                    formData.append('response_format', outputFormat);
+                    
+                    response = await fetch('/v1/audio/speech', {
+                        method: 'POST',
+                        body: formData
+                    });
+                }
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || '生成失败');
+                }
+                
+                const audioBlob = await response.blob();
+                const audioUrl = URL.createObjectURL(audioBlob);
+
+                // 根据输出格式确定文件扩展名
+                let fileExtension = 'mp3';
+                if (outputFormat.includes('webm')) {
+                    fileExtension = 'webm';
+                } else if (outputFormat.includes('ogg')) {
+                    fileExtension = 'ogg';
+                } else if (outputFormat.includes('wav') || outputFormat.includes('pcm')) {
+                    fileExtension = 'wav';
+                }
+
+                // 显示音频播放器
+                const audioPlayer = document.getElementById('audioPlayer');
+                const downloadBtn = document.getElementById('downloadBtn');
+
+                audioPlayer.src = audioUrl;
+                downloadBtn.href = audioUrl;
+                downloadBtn.download = `speech.${fileExtension}`;
+
+                loading.style.display = 'none';
+                success.style.display = 'block';
+
+                // 更新统计缓存
+                updateStatsCache(textLength);
+
+                // 显示公众号推广组件
+                setTimeout(() => {
+                    const githubPromotion = document.getElementById('githubPromotion');
+                    githubPromotion.style.display = 'block';
+                    githubPromotion.classList.add('fade-in');
+                }, 1000);
+                
+            } catch (err) {
+                loading.style.display = 'none';
+                error.style.display = 'block';
+                
+                // 根据错误类型显示不同的提示
+                if (err.message.includes('Too many subrequests')) {
+                    error.textContent = '错误: 文本过长导致请求过多，请缩短文本内容或分段处理';
+                } else if (err.message.includes('频率限制') || err.message.includes('429')) {
+                    error.textContent = '错误: 请求过于频繁，请稍后再试';
+                } else if (err.message.includes('分块数量') && err.message.includes('超过限制')) {
+                    error.textContent = '错误: ' + err.message;
+                } else {
+                    error.textContent = '错误: ' + err.message;
+                }
+            } finally {
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = '<span>🎙️</span><span>开始生成语音</span>';
+            }
+        });
+
+        // 初始化模式切换器
+        function initializeModeSwitcher() {
+            const ttsMode = document.getElementById('ttsMode');
+            const transcriptionMode = document.getElementById('transcriptionMode');
+            const statsMode = document.getElementById('statsMode');
+            const mainContent = document.querySelector('.main-content');
+            const transcriptionContainer = document.getElementById('transcriptionContainer');
+            const statsContainer = document.getElementById('statsContainer');
+
+            ttsMode.addEventListener('click', function() {
+                switchMode('tts');
+            });
+
+            transcriptionMode.addEventListener('click', function() {
+                switchMode('transcription');
+            });
+
+            statsMode.addEventListener('click', function() {
+                switchMode('stats');
+            });
+        }
+
+        // 统计数据缓存
+        let statsCache = null;
+
+        // 切换功能模式
+        function switchMode(mode) {
+            const ttsMode = document.getElementById('ttsMode');
+            const transcriptionMode = document.getElementById('transcriptionMode');
+            const statsMode = document.getElementById('statsMode');
+            const mainContent = document.querySelector('.main-content');
+            const transcriptionContainer = document.getElementById('transcriptionContainer');
+            const statsContainer = document.getElementById('statsContainer');
+            const githubPromotion = document.getElementById('githubPromotion');
+
+            currentMode = mode;
+
+            // 移除所有按钮的激活状态
+            ttsMode.classList.remove('active');
+            transcriptionMode.classList.remove('active');
+            statsMode.classList.remove('active');
+
+            // 隐藏所有容器
+            mainContent.style.display = 'none';
+            transcriptionContainer.style.display = 'none';
+            statsContainer.classList.remove('active');
+
+            if (mode === 'tts') {
+                // 切换到TTS模式
+                ttsMode.classList.add('active');
+                mainContent.style.display = 'block';
+            } else if (mode === 'transcription') {
+                // 切换到语音转录模式
+                transcriptionMode.classList.add('active');
+                transcriptionContainer.style.display = 'block';
+            } else if (mode === 'stats') {
+                // 切换到统计模式
+                statsMode.classList.add('active');
+                statsContainer.classList.add('active');
+                // 如果有缓存则使用缓存，否则加载数据
+                if (statsCache) {
+                    renderStatistics(statsCache);
+                } else {
+                    loadStatistics();
+                }
+            }
+
+            // 隐藏推广组件
+            if (githubPromotion) {
+                githubPromotion.style.display = 'none';
+            }
+        }
+
+        // 初始化音频上传功能
+        function initializeAudioUpload() {
+            const audioDropZone = document.getElementById('audioDropZone');
+            const audioFileInput = document.getElementById('audioFileInput');
+            const audioFileInfo = document.getElementById('audioFileInfo');
+            const audioFileRemoveBtn = document.getElementById('audioFileRemoveBtn');
+
+            // 点击上传区域
+            audioDropZone.addEventListener('click', function() {
+                audioFileInput.click();
+            });
+
+            // 文件选择
+            audioFileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    handleAudioFileSelect(file);
+                }
+            });
+
+            // 拖拽功能
+            audioDropZone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                audioDropZone.classList.add('dragover');
+            });
+
+            audioDropZone.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                audioDropZone.classList.remove('dragover');
+            });
+
+            audioDropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                audioDropZone.classList.remove('dragover');
+                const file = e.dataTransfer.files[0];
+                if (file) {
+                    handleAudioFileSelect(file);
+                }
+            });
+
+            // 移除文件
+            audioFileRemoveBtn.addEventListener('click', function() {
+                selectedAudioFile = null;
+                audioFileInput.value = '';
+                audioFileInfo.style.display = 'none';
+                audioDropZone.style.display = 'block';
+            });
+        }
+
+        // 处理音频文件选择
+        function handleAudioFileSelect(file) {
+            // 验证文件类型
+            const allowedTypes = [
+                'audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/m4a', 'audio/flac', 'audio/aac',
+                'audio/ogg', 'audio/webm', 'audio/amr', 'audio/3gpp'
+            ];
+            
+            const isValidType = allowedTypes.some(type => 
+                file.type.includes(type) || 
+                file.name.toLowerCase().match(/\.(mp3|wav|m4a|flac|aac|ogg|webm|amr|3gp)$/i)
+            );
+
+            if (!isValidType) {
+                alert('请选择音频格式的文件（mp3、wav、m4a、flac、aac、ogg、webm、amr、3gp）');
+                return;
+            }
+
+            // 验证文件大小（限制为10MB）
+            if (file.size > 10 * 1024 * 1024) {
+                alert('音频文件大小不能超过10MB');
+                return;
+            }
+
+            selectedAudioFile = file;
+            
+            // 显示文件信息
+            document.getElementById('audioFileName').textContent = file.name;
+            document.getElementById('audioFileSize').textContent = formatFileSize(file.size);
+            document.getElementById('audioFileInfo').style.display = 'flex';
+            document.getElementById('audioDropZone').style.display = 'none';
+        }
+
+        // 初始化Token配置
+        function initializeTokenConfig() {
+            const tokenRadios = document.querySelectorAll('input[name="tokenOption"]');
+            const tokenInput = document.getElementById('tokenInput');
+
+            tokenRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'custom') {
+                        tokenInput.style.display = 'block';
+                        tokenInput.required = true;
+                    } else {
+                        tokenInput.style.display = 'none';
+                        tokenInput.required = false;
+                        tokenInput.value = '';
+                    }
+                });
+            });
+        }
+
+        // 处理语音转录表单提交
+        document.getElementById('transcriptionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const transcribeBtn = document.getElementById('transcribeBtn');
+            const transcriptionResult = document.getElementById('transcriptionResult');
+            const transcriptionLoading = document.getElementById('transcriptionLoading');
+            const transcriptionSuccess = document.getElementById('transcriptionSuccess');
+            const transcriptionError = document.getElementById('transcriptionError');
+            
+            // 验证音频文件
+            if (!selectedAudioFile) {
+                alert('请选择要转录的音频文件');
+                return;
+            }
+            
+            // 获取Token配置
+            const tokenOption = document.querySelector('input[name="tokenOption"]:checked').value;
+            const customToken = document.getElementById('tokenInput').value;
+            
+            if (tokenOption === 'custom' && !customToken.trim()) {
+                alert('请输入自定义Token');
+                return;
+            }
+            
+            // 重置状态
+            transcriptionResult.style.display = 'block';
+            transcriptionLoading.style.display = 'block';
+            transcriptionSuccess.style.display = 'none';
+            transcriptionError.style.display = 'none';
+            transcribeBtn.disabled = true;
+            transcribeBtn.textContent = '转录中...';
+            
+            // 更新加载提示
+            const loadingText = document.getElementById('transcriptionLoadingText');
+            const progressInfo = document.getElementById('transcriptionProgressInfo');
+            loadingText.textContent = '正在转录音频，请稍候...';
+            progressInfo.textContent = '文件: ' + selectedAudioFile.name + ' (' + formatFileSize(selectedAudioFile.size) + ')';
+            
+            try {
+                // 构建FormData
+                const formData = new FormData();
+                formData.append('file', selectedAudioFile);
+                
+                if (tokenOption === 'custom') {
+                    formData.append('token', customToken);
+                }
+                
+                const response = await fetch('/v1/audio/transcriptions', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || '转录失败');
+                }
+                
+                const result = await response.json();
+                
+                // 显示转录结果
+                document.getElementById('transcriptionText').value = result.text || '';
+                transcriptionLoading.style.display = 'none';
+                transcriptionSuccess.style.display = 'block';
+                
+                // 显示公众号推广组件
+                setTimeout(() => {
+                    const githubPromotion = document.getElementById('githubPromotion');
+                    githubPromotion.style.display = 'block';
+                    githubPromotion.classList.add('fade-in');
+                }, 1000);
+                
+            } catch (err) {
+                transcriptionLoading.style.display = 'none';
+                transcriptionError.style.display = 'block';
+                transcriptionError.textContent = '错误: ' + err.message;
+            } finally {
+                transcribeBtn.disabled = false;
+                transcribeBtn.innerHTML = '<span>🎧</span><span>开始语音转录</span>';
+            }
+        });
+
+        // 复制转录结果
+        document.getElementById('copyTranscriptionBtn').addEventListener('click', function() {
+            const transcriptionText = document.getElementById('transcriptionText');
+            transcriptionText.select();
+            document.execCommand('copy');
+            
+            // 临时改变按钮文本
+            const originalText = this.innerHTML;
+            this.innerHTML = '<span>✅</span><span>已复制</span>';
+            setTimeout(() => {
+                this.innerHTML = originalText;
+            }, 2000);
+        });
+
+        // 编辑转录结果
+        document.getElementById('editTranscriptionBtn').addEventListener('click', function() {
+            const transcriptionText = document.getElementById('transcriptionText');
+            const isReadonly = transcriptionText.readOnly;
+            
+            if (isReadonly) {
+                transcriptionText.readOnly = false;
+                transcriptionText.focus();
+                this.innerHTML = '<span>💾</span><span>保存编辑</span>';
+            } else {
+                transcriptionText.readOnly = true;
+                this.innerHTML = '<span>✏️</span><span>编辑文本</span>';
+            }
+        });
+
+        // 转为语音功能
+        document.getElementById('useForTtsBtn').addEventListener('click', function() {
+            const transcriptionText = document.getElementById('transcriptionText').value;
+            
+            if (!transcriptionText.trim()) {
+                alert('转录结果为空，无法转换为语音');
+                return;
+            }
+            
+            // 切换到TTS模式
+            switchMode('tts');
+            
+            // 将转录文本填入TTS文本框
+            document.getElementById('text').value = transcriptionText;
+            
+            // 滚动到TTS区域
+            document.querySelector('.main-content').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // 初始化国际化
+        function initializeI18n() {
+            // 检查本地存储中的语言设置
+            const savedLang = localStorage.getItem('voicecraft-language');
+            
+            if (savedLang && translations[savedLang]) {
+                currentLanguage = savedLang;
+            } else {
+                // 自动检测浏览器语言
+                currentLanguage = detectLanguage();
+            }
+            
+            // 应用语言设置
+            setLanguage(currentLanguage);
+        }
+
+        // 初始化滑块交互
+        function initializeSliders() {
+            // 语速滑块
+            const speedSlider = document.getElementById('speed');
+            const speedValue = document.getElementById('speedValue');
+            const speedLabels = speedSlider.parentElement.querySelectorAll('.slider-labels span');
+
+            speedSlider.addEventListener('input', function() {
+                const val = parseFloat(this.value);
+                // 如果小数部分是 .x5（如 1.05, 1.15），显示2位小数；否则显示1位小数
+                const decimalPart = (val * 100) % 10;
+                speedValue.textContent = (decimalPart === 5 ? val.toFixed(2) : val.toFixed(1)) + 'x';
+                speedLabels.forEach(label => {
+                    label.classList.toggle('active', label.dataset.value === this.value);
+                });
+            });
+
+            speedLabels.forEach(label => {
+                label.addEventListener('click', function() {
+                    speedSlider.value = this.dataset.value;
+                    const val = parseFloat(this.dataset.value);
+                    const decimalPart = (val * 100) % 10;
+                    speedValue.textContent = (decimalPart === 5 ? val.toFixed(2) : val.toFixed(1)) + 'x';
+                    speedLabels.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // 音调滑块
+            const pitchSlider = document.getElementById('pitch');
+            const pitchValue = document.getElementById('pitchValue');
+            const pitchLabels = pitchSlider.parentElement.querySelectorAll('.slider-labels span');
+
+            pitchSlider.addEventListener('input', function() {
+                const val = parseInt(this.value);
+                pitchValue.textContent = val > 0 ? '+' + val : val;
+                pitchLabels.forEach(label => {
+                    label.classList.toggle('active', label.dataset.value === this.value);
+                });
+            });
+
+            pitchLabels.forEach(label => {
+                label.addEventListener('click', function() {
+                    pitchSlider.value = this.dataset.value;
+                    const val = parseInt(this.dataset.value);
+                    pitchValue.textContent = val > 0 ? '+' + val : val;
+                    pitchLabels.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        }
+
+        // 初始化语言切换器
+        function initializeLanguageSwitcher() {
+            const languageBtn = document.getElementById('languageBtn');
+            const languageDropdown = document.getElementById('languageDropdown');
+
+            // 切换下拉菜单显示/隐藏
+            languageBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                languageDropdown.classList.toggle('show');
+            });
+
+            // 点击页面其他地方时隐藏下拉菜单
+            document.addEventListener('click', function() {
+                languageDropdown.classList.remove('show');
+            });
+
+            // 语言选择
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const selectedLang = this.getAttribute('data-lang');
+                    setLanguage(selectedLang);
+                    languageDropdown.classList.remove('show');
+                });
+            });
+
+            // 确保初始化时正确设置当前语言的高亮状态
+            updateLanguageSwitcher();
+        }
+
+        // 初始化深色模式
+        function initializeDarkMode() {
+            const themeToggle = document.getElementById('themeToggle');
+            const savedTheme = localStorage.getItem('voicecraft-theme');
+
+            // 应用保存的主题
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+            }
+
+            // 切换主题
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+                const isDark = document.body.classList.contains('dark-mode');
+                localStorage.setItem('voicecraft-theme', isDark ? 'dark' : 'light');
+            });
+        }
+
+        // 检查统计功能是否启用（从服务器端传递的变量）
+        function checkStatsEnabled() {
+            if (typeof window.STATS_ENABLED === 'undefined' || !window.STATS_ENABLED) {
+                hideStatsButton();
+            }
+        }
+
+        // 隐藏统计按钮
+        function hideStatsButton() {
+            const statsMode = document.getElementById('statsMode');
+            if (statsMode) {
+                statsMode.style.display = 'none';
+            }
+        }
+
+        // 加载统计数据
+        async function loadStatistics() {
+            const statsLoading = document.getElementById('statsLoading');
+            const statsContent = document.getElementById('statsContent');
+            const statsError = document.getElementById('statsError');
+
+            // 显示加载状态
+            statsLoading.style.display = 'block';
+            statsContent.style.display = 'none';
+            statsError.style.display = 'none';
+
+            try {
+                const response = await fetch('/v1/stats');
+                if (!response.ok) {
+                    throw new Error('Failed to load statistics');
+                }
+
+                const data = await response.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                // 缓存数据
+                statsCache = data;
+
+                // 渲染统计数据
+                renderStatistics(data);
+
+            } catch (error) {
+                console.error('Failed to load statistics:', error);
+                statsLoading.style.display = 'none';
+                statsError.style.display = 'block';
+            }
+        }
+
+        // 渲染统计数据
+        async function renderStatistics(data) {
+            const statsLoading = document.getElementById('statsLoading');
+            const statsContent = document.getElementById('statsContent');
+            const statsError = document.getElementById('statsError');
+
+            // 更新总计卡片
+            document.getElementById('totalPageViews').textContent = formatNumber(data.total.pageViews);
+            document.getElementById('totalTtsCalls').textContent = formatNumber(data.total.ttsCalls);
+            document.getElementById('totalTtsChars').textContent = formatNumber(data.total.ttsChars);
+
+            // 渲染热力图
+            renderHeatmap(data.daily.ttsCalls);
+
+            // 渲染趋势图（异步加载 ECharts）
+            await renderChart(data.daily);
+
+            // 显示内容
+            statsLoading.style.display = 'none';
+            statsContent.style.display = 'block';
+        }
+
+        // 刷新统计数据
+        async function refreshStatistics() {
+            const refreshBtn = document.getElementById('statsRefreshBtn');
+            if (refreshBtn.classList.contains('loading')) {
+                return; // 正在加载中，忽略重复点击
+            }
+
+            refreshBtn.classList.add('loading');
+
+            try {
+                await loadStatistics();
+            } finally {
+                refreshBtn.classList.remove('loading');
+            }
+        }
+
+        // 更新缓存中的统计数据（TTS调用后）
+        function updateStatsCache(textLength) {
+            if (!statsCache) {
+                return;
+            }
+
+            // 更新总计
+            statsCache.total.ttsCalls += 1;
+            statsCache.total.ttsChars += textLength;
+
+            // 更新今天的数据
+            const today = new Date().toISOString().split('T')[0];
+            const todayIndex = statsCache.daily.ttsCalls.findIndex(d => d.date === today);
+
+            if (todayIndex !== -1) {
+                statsCache.daily.ttsCalls[todayIndex].count += 1;
+                statsCache.daily.ttsChars[todayIndex].count += textLength;
+            }
+
+            // 如果当前在统计页面，更新显示
+            if (currentMode === 'stats') {
+                renderStatistics(statsCache);
+            }
+        }
+
+        // 格式化数字
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        // 渲染热力图（5列6行，右下角为最新日期，先从下到上，再从右到左）
+        function renderHeatmap(dailyData) {
+            const heatmapGrid = document.getElementById('heatmapGrid');
+            heatmapGrid.innerHTML = '';
+
+            // 计算最大值用于归一化
+            const maxCount = Math.max(...dailyData.map(d => d.count), 1);
+
+            // 只取最后30天数据
+            const last30Days = dailyData.slice(-30);
+
+            // 创建一个6行5列的二维数组来存储单元格
+            const rows = 6;
+            const cols = 5;
+            const cells = [];
+
+            // 填充数据：从右下角开始，先从下到上，再从右到左
+            // 今天在右下角(第5列第6行)，昨天在第5列第5行，前天在第5列第4行
+            // 6天前在第4列第6行
+            let dataIndex = last30Days.length - 1;
+            for (let col = cols - 1; col >= 0; col--) {
+                for (let row = rows - 1; row >= 0; row--) {
+                    if (dataIndex >= 0) {
+                        const day = last30Days[dataIndex];
+                        const cell = document.createElement('div');
+                        cell.className = 'heatmap-cell';
+
+                        // 计算级别 (0-5)
+                        const level = day.count === 0 ? 0 : Math.min(5, Math.ceil((day.count / maxCount) * 5));
+                        cell.setAttribute('data-level', level);
+
+                        // 添加鼠标悬停事件显示日期和数值
+                        cell.addEventListener('mouseenter', function(e) {
+                            const tooltip = document.createElement('div');
+                            tooltip.className = 'heatmap-tooltip';
+                            tooltip.textContent = `${day.date}: ${day.count} 次调用`;
+                            tooltip.style.display = 'block';
+                            tooltip.style.left = e.pageX + 10 + 'px';
+                            tooltip.style.top = e.pageY + 10 + 'px';
+                            document.body.appendChild(tooltip);
+                            cell._tooltip = tooltip;
+                        });
+
+                        cell.addEventListener('mouseleave', function() {
+                            if (cell._tooltip) {
+                                cell._tooltip.remove();
+                                cell._tooltip = null;
+                            }
+                        });
+
+                        cell.addEventListener('mousemove', function(e) {
+                            if (cell._tooltip) {
+                                cell._tooltip.style.left = e.pageX + 10 + 'px';
+                                cell._tooltip.style.top = e.pageY + 10 + 'px';
+                            }
+                        });
+
+                        if (!cells[row]) cells[row] = [];
+                        cells[row][col] = cell;
+                        dataIndex--;
+                    }
+                }
+            }
+
+            // 按行顺序添加到DOM（从上到下，从左到右）
+            for (let row = 0; row < rows; row++) {
+                for (let col = 0; col < cols; col++) {
+                    if (cells[row] && cells[row][col]) {
+                        heatmapGrid.appendChild(cells[row][col]);
+                    } else {
+                        // 空单元格
+                        const emptyCell = document.createElement('div');
+                        emptyCell.className = 'heatmap-cell';
+                        emptyCell.setAttribute('data-level', '0');
+                        heatmapGrid.appendChild(emptyCell);
+                    }
+                }
+            }
+        }
+
+        // 渲染趋势图（使用 ECharts）
+        let statsChart = null;
+        let echartsLoaded = false;
+        let echartsLoading = false;
+
+        // 动态加载 ECharts
+        function loadECharts() {
+            return new Promise((resolve, reject) => {
+                if (echartsLoaded) {
+                    resolve();
+                    return;
+                }
+
+                if (echartsLoading) {
+                    // 等待加载完成
+                    const checkInterval = setInterval(() => {
+                        if (echartsLoaded) {
+                            clearInterval(checkInterval);
+                            resolve();
+                        }
+                    }, 100);
+                    return;
+                }
+
+                echartsLoading = true;
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js';
+                script.onload = () => {
+                    echartsLoaded = true;
+                    echartsLoading = false;
+                    resolve();
+                };
+                script.onerror = () => {
+                    echartsLoading = false;
+                    reject(new Error('Failed to load ECharts'));
+                };
+                document.head.appendChild(script);
+            });
+        }
+
+        async function renderChart(dailyData) {
+            const chartDom = document.getElementById('statsChart');
+            if (!chartDom) return;
+
+            // 确保 ECharts 已加载
+            if (!echartsLoaded) {
+                try {
+                    await loadECharts();
+                } catch (error) {
+                    console.error('Failed to load ECharts:', error);
+                    return;
+                }
+            }
+
+            // 初始化或获取图表实例
+            if (!statsChart) {
+                statsChart = echarts.init(chartDom);
+            }
+
+            // 准备数据
+            const dates = dailyData.pageViews.map(d => {
+                const date = new Date(d.date);
+                return `${date.getMonth() + 1}/${date.getDate()}`;
+            });
+
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            const textColor = isDarkMode ? '#cbd5e1' : '#475569';
+            const gridColor = isDarkMode ? '#334155' : '#e2e8f0';
+
+            // 获取翻译
+            const langData = translations[currentLanguage];
+
+            const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: isDarkMode ? '#1e293b' : '#ffffff',
+                    borderColor: gridColor,
+                    textStyle: {
+                        color: textColor
+                    }
+                },
+                legend: {
+                    data: [
+                        langData['stats.chart.pageViews'] || '页面访问数',
+                        langData['stats.chart.ttsCalls'] || 'TTS调用次数',
+                        langData['stats.chart.ttsChars'] || 'TTS字符数'
+                    ],
+                    textStyle: {
+                        color: textColor
+                    },
+                    top: 10
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    top: '15%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: dates,
+                    axisLine: {
+                        lineStyle: {
+                            color: gridColor
+                        }
+                    },
+                    axisLabel: {
+                        color: textColor
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLine: {
+                        lineStyle: {
+                            color: gridColor
+                        }
+                    },
+                    axisLabel: {
+                        color: textColor
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: gridColor
+                        }
+                    }
+                },
+                series: [
+                    {
+                        name: langData['stats.chart.pageViews'] || '页面访问数',
+                        type: 'line',
+                        data: dailyData.pageViews.map(d => d.count),
+                        smooth: true,
+                        lineStyle: {
+                            color: 'rgb(37, 99, 235)',
+                            width: 2
+                        },
+                        itemStyle: {
+                            color: 'rgb(37, 99, 235)'
+                        }
+                    },
+                    {
+                        name: langData['stats.chart.ttsCalls'] || 'TTS调用次数',
+                        type: 'line',
+                        data: dailyData.ttsCalls.map(d => d.count),
+                        smooth: true,
+                        lineStyle: {
+                            color: 'rgb(16, 185, 129)',
+                            width: 2
+                        },
+                        itemStyle: {
+                            color: 'rgb(16, 185, 129)'
+                        }
+                    },
+                    {
+                        name: langData['stats.chart.ttsChars'] || 'TTS字符数',
+                        type: 'line',
+                        data: dailyData.ttsChars.map(d => d.count),
+                        smooth: true,
+                        areaStyle: {
+                            color: {
+                                type: 'linear',
+                                x: 0,
+                                y: 0,
+                                x2: 0,
+                                y2: 1,
+                                colorStops: [{
+                                    offset: 0,
+                                    color: 'rgba(245, 158, 11, 0.3)'
+                                }, {
+                                    offset: 1,
+                                    color: 'rgba(245, 158, 11, 0.05)'
+                                }]
+                            }
+                        },
+                        lineStyle: {
+                            color: 'rgb(245, 158, 11)',
+                            width: 2
+                        },
+                        itemStyle: {
+                            color: 'rgb(245, 158, 11)'
+                        }
+                    }
+                ]
+            };
+
+            statsChart.setOption(option);
+
+            // 确保图表正确调整大小
+            setTimeout(() => {
+                if (statsChart) {
+                    statsChart.resize();
+                }
+            }, 100);
+
+            // 监听窗口大小变化
+            window.addEventListener('resize', function() {
+                if (statsChart) {
+                    statsChart.resize();
+                }
+            });
+        }
+    </script>
+</main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h2>VoiceCafe TTS</h2>
+                <p data-i18n="footer.subtitle">AI驱动的语音处理平台</p>
+            </div>
+            <div class="footer-section">
+                <h3 data-i18n="footer.privacy.title">隐私声明</h3>
+                <p data-i18n="footer.privacy.noCookies">🔒 我们不使用 Cookie 追踪用户</p>
+                <p data-i18n="footer.privacy.noStorage">🗑️ 不存储用户上传的任何数据</p>
+                <p data-i18n="footer.privacy.oneTime">⚡ 所有语音转换都是一次性的</p>
+                <p data-i18n="footer.privacy.autoDelete">✅ 转换完成后相关数据立即删除</p>
+            </div>
+            <div class="footer-section">
+                <h3 data-i18n="footer.openSource.title">开源项目</h3>
+                <p>
+                    <a href="https://github.com/Raincarnator/VoiceCafe-TTS" target="_blank" class="footer-link">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: middle;">
+                            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                        </svg>
+                        <span data-i18n="footer.openSource.github">GitHub 仓库</span>
+                    </a>
+                </p>
+                <p>
+                    <a href="#" id="ttsSourceLink" class="footer-link">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: middle;">
+                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                        </svg>
+                        <span data-i18n="footer.openSource.ttsSource">TTS 源</span>
+                    </a>
+                </p>
+                <p class="footer-copyright">© 2026 VoiceCafe TTS</p>
+            </div>
+        </div>
+    </footer>
+</body>
