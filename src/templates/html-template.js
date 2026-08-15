@@ -195,6 +195,23 @@ export const getHTMLPage = (gaMeasurementId = null, statsEnabled = false) => {
             box-shadow: 0 0 0 3px rgb(59 130 246 / 0.1);
         }
         
+        /* 下拉选框：自定义箭头（与边框同色，右侧留出间距） */
+        .form-select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding-right: 44px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23e2e8f0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 12px 8px;
+            cursor: pointer;
+        }
+
+        body.dark-mode .form-select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23334155' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        }
+        
         .form-textarea {
             min-height: 120px;
             resize: vertical;
@@ -4410,6 +4427,22 @@ export const getHTMLPage = (gaMeasurementId = null, statsEnabled = false) => {
             // 获取翻译
             const langData = translations[currentLanguage];
 
+            // TTS 字符数数量级远大于其他两项，趋势图中以"千"为单位显示，避免其他曲线贴近横轴
+            const ttsCharsName = langData['stats.chart.ttsChars'] || 'TTS字符数';
+            const ttsCharsUnit = {
+                en: 'k',
+                zh: '千',
+                'zh-TW': '千',
+                ja: '千',
+                ko: '천',
+                es: 'k',
+                fr: 'k',
+                de: 'k',
+                ru: 'тыс.'
+            }[currentLanguage] || 'k';
+            const ttsCharsLabel = ttsCharsName + ' (' + ttsCharsUnit + ')';
+            const ttsCharsData = dailyData.ttsChars.map(d => Math.round((d.count / 1000) * 10) / 10);
+
             const option = {
                 tooltip: {
                     trigger: 'axis',
@@ -4423,7 +4456,7 @@ export const getHTMLPage = (gaMeasurementId = null, statsEnabled = false) => {
                     data: [
                         langData['stats.chart.pageViews'] || '页面访问数',
                         langData['stats.chart.ttsCalls'] || 'TTS调用次数',
-                        langData['stats.chart.ttsChars'] || 'TTS字符数'
+                        ttsCharsLabel
                     ],
                     textStyle: {
                         color: textColor
@@ -4472,6 +4505,9 @@ export const getHTMLPage = (gaMeasurementId = null, statsEnabled = false) => {
                         type: 'line',
                         data: dailyData.pageViews.map(d => d.count),
                         smooth: true,
+                        tooltip: {
+                            valueFormatter: (value) => formatNumber(value)
+                        },
                         lineStyle: {
                             color: 'rgb(37, 99, 235)',
                             width: 2
@@ -4485,6 +4521,9 @@ export const getHTMLPage = (gaMeasurementId = null, statsEnabled = false) => {
                         type: 'line',
                         data: dailyData.ttsCalls.map(d => d.count),
                         smooth: true,
+                        tooltip: {
+                            valueFormatter: (value) => formatNumber(value)
+                        },
                         lineStyle: {
                             color: 'rgb(16, 185, 129)',
                             width: 2
@@ -4494,10 +4533,13 @@ export const getHTMLPage = (gaMeasurementId = null, statsEnabled = false) => {
                         }
                     },
                     {
-                        name: langData['stats.chart.ttsChars'] || 'TTS字符数',
+                        name: ttsCharsLabel,
                         type: 'line',
-                        data: dailyData.ttsChars.map(d => d.count),
+                        data: ttsCharsData,
                         smooth: true,
+                        tooltip: {
+                            valueFormatter: (value) => formatNumber(Math.round(value * 1000))
+                        },
                         areaStyle: {
                             color: {
                                 type: 'linear',
